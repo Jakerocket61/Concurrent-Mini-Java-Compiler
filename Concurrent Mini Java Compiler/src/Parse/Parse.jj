@@ -1,0 +1,655 @@
+/* COSC 4400: Compiler Construction
+ * Spring 2013
+ *
+ * Project 3: Parser
+ *
+ * Jacob Anderson
+ * Jack Batzner
+ * Paul Kaefer
+ *
+ */
+
+PARSER_BEGIN(Parse)
+    package Parse;
+    import java.util.LinkedList;
+    import java.util.List;
+    import Absyn.*;
+
+	public class Parse{}
+PARSER_END(Parse)
+
+SKIP :
+{
+	" "
+| 	"\t"
+|	"\n"
+|	"\r"
+|	"\f"
+
+/* Skip comments: */
+/* Uses the comment-recognizing regular expression found in the C grammar example, found at http://java.net/downloads/javacc/contrib/grammars/C.jj */
+/* ...it's <em>slightly</em>  modified from that source */
+|	< "//" (~["\n","\r"])* ("\n" | "\r" | "\r\n" | "\n\r") >
+|	< "/*" (~["*"])* "*" ("*" | ~["*","/"] (~["*"])* "*")* "/" >
+
+}
+
+TOKEN :
+{
+/* Arithmetic symbols */
+	< PLUS:		"+" >
+|	< MINUS:	"-" >
+|	< MULT:		"*" >
+|	< DIV:		"/" >
+
+/* Literals */
+
+/* Numbers: 1XX... through 9XX... or just 0 */
+| 	< NUM: ( ["1"-"9"] (["0"-"9"])* | "0" ) >
+
+/* Reserved words */
+
+|	< BOOLEAN: "boolean" >
+|	< CLASS: "class" >
+|	< ELSE: "else" >
+|	< EXTENDS: "extends" >
+|	< FALSE: "false" >
+|	< IF: "if" >
+|	< INT: "int" >
+|	< LENGTH: "length" >
+|	< MAIN: "main" >
+|	< NEW: "new" >
+|   < NULL: "null" >
+|	< PUBLIC: "public" >
+|	< RETURN: "return" >
+|	< STATIC: "static" >
+|   < STRING_RESERVED_WORD: "String" >
+|	< SYNCHRONIZED: "synchronized" >
+|	< THIS: "this" >
+|   < THREAD: "Thread" >
+|	< TRUE: "true" >
+|	< VOID: "void" >
+|	< WHILE: "while" >
+|	< XINU: "Xinu" >
+
+/* NEVERMIND: print, etc. are not reserved words. See Dr. Brylow's reference implementation. */
+/* Xinu. identifiers */
+/*
+|	< PRINT: "print" >
+|	< PRINTINT: "printint" >
+|	< PRINTLN: "println" >
+|	< READINT: "readint" >
+|	< SLEEP: "sleep" >
+|	< THREADCREATE: "threadCreate" >
+|	< YIELD: "yield" >*/
+
+/* Identifiers */
+
+|       < ID: <LETTER> (<LETTER> | <DIGIT> | <UNDERSCORE>)* >
+|       < #LETTER: ["A"-"Z","a"-"z"] >
+|       < #DIGIT: ["0"-"9"] >
+|       < #UNDERSCORE: "_" >
+
+/* Strings */
+
+|   < STRING: "\"" (~["\"","\n","\r"])* "\"" >
+
+/* Recognized characters */
+
+/*|	< PERIOD: "." >*/
+}
+
+
+/* Grammar */
+
+Program Program() :
+{
+    ClassDecl cd;
+    LinkedList<ClassDecl> classDeclarations = new LinkedList<ClassDecl>();
+}
+{
+    cd = MainClassDeclaration() { classDeclarations.add(cd); } ( cd = SubClassDecl() { classDeclarations.add(cd); } )* <EOF> 
+    { 
+            return new Program(classDeclarations); 
+    }
+}
+
+ClassDecl MainClassDeclaration() :
+{
+	Token name;
+	LinkedList<VarDecl> fields = new LinkedList<VarDecl>();
+	LinkedList<Stmt> stmts = new LinkedList<Stmt>();
+	LinkedList<MethodDecl> m = new LinkedList<MethodDecl>();
+	LinkedList<Formal> args = new LinkedList<Formal>();
+	VarDecl v;
+	Stmt s;
+
+    LinkedList<VarDecl> noFieldsForMainMethod = new LinkedList<VarDecl>();
+
+	Token arg;
+}
+{
+    "class" name = <ID> "{" <PUBLIC> <STATIC>  <VOID> <MAIN> "(" <STRING_RESERVED_WORD>("[]"|("[" "]")) arg = <ID> ")" "{" ( LOOKAHEAD(2) v = VarDeclaration() {fields.add(v);} )* ( s = Statement() {stmts.add(s);} )*  "}" "}"
+			{
+                args.add(new Formal(new ArrayType(new IdentifierType("String")), arg.image));
+			    m.add(new MethodDecl(null, false, "main", args, fields, stmts, new IntegerLiteral(0) ));
+			    return new ClassDecl(noFieldsForMainMethod, m, name.image, "null");
+            }
+}
+
+ClassDecl SubClassDecl() :
+{
+	Token name;
+	String parent;
+	LinkedList<VarDecl> varDeclarations = new LinkedList<VarDecl>();
+	VarDecl v;
+	LinkedList<MethodDecl> methodDeclarations = new LinkedList<MethodDecl>();
+	MethodDecl m;
+}
+{
+
+    <CLASS> name = <ID>  parent = ExtendStm() "{" ( v = FieldDeclaration() {varDeclarations.add(v);} { v = FieldDeclaration(); varDeclarations.add(v);} | m = MethodDeclaration() {methodDeclarations.add(m);}   )* "}" /* | m = VoidDeclaration() {methodDeclarations.add(m);} WE TOOK THIS OUT!! IF IT BREAKS PUT IT BACK */
+
+    {
+    if(parent.equals("Thread")) 
+		return new ThreadDecl(name.image, varDeclarations,methodDeclarations); 
+	else 
+		return new ClassDecl(varDeclarations, methodDeclarations, name.image, parent);
+    }
+
+
+}
+
+String ExtendStm() :
+{
+	String className = "null";
+}
+{
+	    [ <EXTENDS> className = ClassName() ] 
+	{ return className; }
+}
+
+String ClassName() :
+{
+	Token className;
+}
+{
+    <THREAD> { return "Thread"; }
+|   className = <ID> { return className.image; }
+}
+
+VarDecl FieldDeclaration() :
+{
+	Type t;
+	Token id;
+}
+{
+    t = Type() id = <ID> ";" {return new VarDecl(t, id.image, null); }
+}
+
+VarDecl VarDeclaration() :
+{
+	Type t;
+	Token id;
+	Expr e = null;
+}
+{
+    t=Type() id=<ID> [ e=VarDecEnd() ] ";"{return new VarDecl(t, id.image, e);}
+}
+
+Expr VarDecEnd() :
+{
+	Expr e = null;
+}
+{
+    /*";" { return null; }
+|*/   "=" e = Expression() { return e; }
+}
+
+MethodDecl MethodDeclaration() :
+{
+	MethodDecl m;
+}
+{
+    <PUBLIC> m = MethodPrime() {return m;}
+}
+
+MethodDecl MethodPrime() :
+{
+	Type returnType;
+	Token name;
+	boolean synced = false;
+	LinkedList<Formal> params = new LinkedList<Formal>();
+	LinkedList<VarDecl> locals = new LinkedList<VarDecl>();
+	LinkedList<Stmt> stmts = new LinkedList<Stmt>();
+	Expr returnVal = null;
+
+	Type temp;
+	Token VarTemp;
+	VarDecl v;
+	Stmt s;
+}
+{ 
+    returnType = Type() name = <ID> "(" [ <SYNCHRONIZED> {synced = true;}] [ temp = Type() VarTemp = <ID> {params.add(new Formal(temp, VarTemp.image));} ( "," temp = Type() VarTemp = <ID> {params.add(new Formal(temp, VarTemp.image));} )* ] ")" "{" ( LOOKAHEAD(2) v = VarDeclaration() {locals.add(v);} )*  ( s = Statement() {stmts.add(s);} )*  <RETURN> returnVal = Expression() ";" "}"
+		{return new MethodDecl(returnType, synced, name.image, params, locals, stmts, returnVal);}	
+|   <VOID> name = <ID> "(" ")" "{" ( LOOKAHEAD(2) v = VarDeclaration() {locals.add(v);} )*  ( s = Statement() {stmts.add(s);} )*  "}" {return new VoidDecl(name.image, locals, stmts);}
+}
+
+Stmt Statement() :
+{
+	LinkedList<Stmt> stmts = new LinkedList<Stmt>();	
+	Stmt s1;
+	Stmt s2 = null;
+	Expr e1;
+    Expr e2;
+    AssignableExpr ae;
+	XinuCallStmt x;
+}
+{
+
+    /*LOOKAHEAD(2) */
+
+    "{" ( s1 = Statement() {stmts.add(s1);} )* "}" 
+    {
+        /*if (stmts.isEmpty())
+            return null;
+        else*/
+            return new BlockStmt(stmts);
+    }
+|   "if" "(" e1 = Expression() ")" ( s1 = Statement() ) [ LOOKAHEAD(2) "else" s2 = Statement() ] {return new IfStmt(e1,s1,s2);}
+|   <WHILE> "(" e1 = Expression() ")" s1 = Statement() {return new WhileStmt(e1,s1);}
+|   ae = AssignExpression() "=" e2 = StatementPrime() ";" {return new AssignStmt(ae, e2);}
+|   x = XinuStatement() ";" {return x;}
+}
+
+Expr StatementPrime() :
+{
+	Expr e;
+	XinuCallExpr x1;
+	XinuCallStmt x2;
+}
+{
+    e = Expression() {return e;}
+|   x2 = XinuStatement() {return new XinuCallExpr(x2.method, x2.args);}
+}
+
+XinuCallStmt XinuStatement() :
+{
+    Token method;
+    LinkedList<Expr> args = new LinkedList<Expr>();
+    /*List expressionList = new LinkedList();*/
+    Expr e;
+}
+{
+    <XINU> "." method = <ID> "(" [ e = Expression() { args.add(e); } ( "," e = Expression() { args.add(e); } )* ] ")" [ XinuStatementPrime() ]
+        { return new XinuCallStmt(method.image, args); }
+}
+
+AssignableExpr AssignExpression() :
+{
+    Token e1;
+    Token F = null;
+    AssignableExpr e2 = null;
+    AssignableExpr e3 = null;
+}
+{
+    /*e1 = <ID> {e2 = new IdentifierExpr(e1.image);} ( e3 = ArrayE1(e2) )? [e3 = AssignExpression1(e2)] {if(e3 == null) return e2;
+												       else return e3;}*/
+
+    e1 = <ID> {e2 = new IdentifierExpr(e1.image);} ( e3 = ArrayE1(e2) )? {if(e3 == null) return e2; else return e3;}
+}
+
+/*AssignableExpr AssignExpression1(Expr in) :
+{
+	Token t;
+	Expr e;
+}
+{
+    "." t = <ID> {return new FieldExpr(in, t.image);}
+}*/
+
+
+Expr XinuStatementPrime() :
+{
+	Expr e;
+}
+{
+     "=" e = Expression() {return e;}
+}
+
+Expr Expression() :
+{
+	Expr e1;
+	Expr e2;
+}
+{
+    e1 = NewE() [ "." e1 = Expression1(e1) ] {return e1;}  
+//|   e1 = ParenExp() {return e1;}
+//|   e1 = NewE() {return e1;}
+}
+
+/*Expr ParenExp() :
+{
+	Expr e;
+}
+{
+	"(" e = Expression() ")" [e = AnotherNonTerm(e)] {return e;}
+}
+
+Expr AnotherNonTerm(Expr e1) :
+{
+	Expr e2 = null;
+}
+{
+
+
+   e2 = Term1(e1) {return e2;}
+|  e2 = Equal1(e1) {return e2;}
+|  e2 = Factor1(e1) {return e2;}
+|  e2 = Arith1(e1) {return e2;}
+|  e2 = MulDiv1(e1) {return e2;}
+}*/
+
+
+Expr NewE() :
+{
+    Expr e  = null;
+    Type t = null;
+}
+{
+   "new" t = Type() e = NewE1(t) [e = Expression1(e)]
+    { 
+      return e; 
+    }
+
+|   e = Term() {return e;}
+
+}
+
+Expr NewE1(Type input) :
+{
+    LinkedList<Expr> l = new LinkedList<Expr>();
+    Expr e;
+}
+{
+
+    "(" ")" {return new NewObjectExpr(input);}
+|   "[" e = Expression() {l.add(e); e = null;} "]" ("[]"{l.add(e);})* {return new NewArrayExpr(input, l);}
+   /*e = NewE2(t) { return  t; new NewArrayExpr(t,l);}*/
+}
+
+
+Expr Expression1(Expr e1) :
+{
+	LinkedList<Expr> e2 = new LinkedList<Expr>();
+	Token s;
+    boolean isCall = false;
+}
+{
+    s = <ID>  [ e2 = Expression2() {isCall = true;} ] {if(!isCall) 
+                                                        return new FieldExpr(e1,s.image);
+                                                       else
+                                                        return new CallExpr(e1, s.image, e2);} 
+}
+
+LinkedList<Expr> Expression2() :
+{
+	LinkedList<Expr> args = new LinkedList<Expr>(); 
+	Expr e;
+}
+{
+    "(" [ e = Expression() {args.add(e);} ( "," e=Expression() {args.add(e);} )* ] ")" {return args;}
+}
+
+
+Expr Term() :
+{
+	Expr e1;
+}
+{
+    e1 = Equal() [ e1 = Term1(e1) ] {return e1;}
+
+}
+
+Expr Term1(Expr e1) :
+{
+	Expr e2;
+	Expr e3;
+	Expr e4 = null;
+}
+{
+    "&&" e2 = Equal() {e3 = new AndExpr(e1,e2);}[ e4 = Term1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}
+|   "||" e2 = Equal() {e3 = new OrExpr(e1,e2);} [ e4 = Term1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}
+}
+
+Expr Equal() :
+{
+	Expr e1;
+}
+{
+	e1 = Factor() [e1 = Equal1(e1) ] {return e1;}
+}
+
+Expr Equal1(Expr e1) :
+{
+	Expr e2;
+	Expr e3;
+	Expr e4 = null;
+}
+{
+    "==" e2 = Factor() {e3 = new EqualExpr(e1,e2); } [ e4 = Equal1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}
+|   "!=" e2 = Factor() {e3 = new NotEqExpr(e1,e2); } [ e4 = Equal1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}	
+}
+
+Expr Factor() :
+{
+	Expr e1;
+}
+{
+    e1 = Arith() [ e1 = Factor1(e1) ] {return e1;}
+}
+
+Expr Factor1(Expr e1) :
+{
+	Expr e2;
+	Expr e3;
+	Expr e4 = null;
+}
+{
+ /*   "==" e2 = Arith() {e3 = new EqualExpr(e1,e2); } [ e4 = Factor1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}
+|*/
+
+   "<" e2 = Arith() {e3 = new LesserExpr(e1,e2);} [ e4 = Factor1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}
+|   ">" e2 = Arith() {e3 =  new GreaterExpr(e1,e2);} [ e4 = Factor1(e3) ] {if(e4 != null)
+									return e4;
+								     else return e3;}
+}
+
+Expr Arith() :
+{
+	Expr e1;
+}
+{
+    e1 = MulDiv() [ e1 = Arith1(e1) ] {return e1;}
+}
+
+/*Expr Arith1(Expr e1) :
+{
+	Expr e2;
+}
+{
+    "+" e2 = MulDiv() [ e2 = Arith1(e2) ] {return new AddExpr(e1,e2);}
+|   "-" e2 = MulDiv() [ e2 = Arith1(e2) ] {return new SubExpr(e1,e2);}
+}*/
+
+Expr Arith1(Expr e1) :
+{
+	Expr e2;
+	Expr e3;
+	Expr e4 = null;
+}
+{
+    "+" e2 = MulDiv() {e3 = new AddExpr(e1,e2);} [ e4 = Arith1(e3)] {if(e4 != null)
+									return e4;
+								     else return e3;}
+|   "-" e2 = MulDiv() {e3 = new SubExpr(e1,e2);} [ e4 = Arith1(e3)] {if(e4 != null)
+									return e4;
+								     else return e3;}
+}
+
+/*Expr Arith1(Expr e1) :
+{
+	Expr e2;
+}
+{
+    "+" e2 = PaulsCrazyIdea() {return new AddExpr(e1,e2);}
+|   "-" e2 = PaulsCrazyIdea() {return new SubExpr(e1,e2);}
+}
+
+Expr PaulsCrazyIdea() :
+{
+	Expr e3;
+}
+{
+	Factor() Arith1()
+|	Factor() MulDiv()
+}*/
+
+Expr MulDiv() :
+{
+	Expr e1;
+}
+{
+    e1 = ArrayE() [ e1 = MulDiv1(e1) ] {return e1;}
+}
+
+Expr MulDiv1(Expr e1) :
+{
+	Expr e2;
+	Expr e3;
+	Expr e4 = null;
+}
+{
+    "*" e2 = ArrayE() {e3 = new MulExpr(e1,e2); }[ e4 = MulDiv1(e3) ] {if(e4 != null)
+									return e4;
+								     else 
+								     	return e3;
+								     }
+|   "/" e2 = ArrayE() {e3 = new DivExpr(e1,e2);}[ e4 = MulDiv1(e3) ] {if(e4 != null)
+									return e4;
+								     else
+								     	return e3;
+								     }
+}
+
+Expr ArrayE() :
+{
+    Expr ae = null;
+    Expr e = null;
+}
+{
+    ae = Unary() [ e = ArrayE1(ae) ] { if (e==null) 
+                                        return ae; 
+                                    else 
+                                        return e; }
+
+}
+
+Expr Unary() :
+{
+   Expr e = null;
+}
+{
+    "!" e = Lowest() {return new NotExpr(e);}
+|   "-" e = Lowest() {return new NegExpr(e);}
+|   e = Lowest() {return e;}
+}
+
+AssignableExpr ArrayE1(Expr in) :
+{
+    Expr e = null;
+}
+{
+    "[" e = Expression() "]" { return new ArrayExpr(in, e); }
+}
+
+
+/*
+Expr NewE2(Type passedin) :
+{
+    LinkedList<Expr> l = new LinkedList<Expr>();
+    Expr e = null;
+    Expr returnE;
+}
+{
+    "(" ")"                             { return new NewObjectExpr(passedin) ; }
+|   "[" e = Expression() /*{l.add(e);}"]" ( "[]" )*  "]" [LOOKAHEAD(3) returnE = NewE2( passedin)]   { return new NewArrayExpr(passedin, l) ; }
+}
+*/
+
+Type Type() :
+{
+    Type t;
+    boolean AType = false;
+}
+{
+    t = NormalType() (t = Brackets(t))* /*[ ("[""]")* {AType = true;}*/ /*( "[" "]" {AType = true;})* */ 
+    {
+        /*if (AType) 
+            return new ArrayType(t); 
+        else */
+            return t;
+    }
+}
+
+Type Brackets(Type t):
+{}
+{
+    "[]" {return new ArrayType(t); }
+}
+
+Type NormalType() :
+{
+    Token t;
+}
+{
+    <BOOLEAN>   {return new BooleanType();}
+|   <INT>       {return new IntegerType();}
+|   t = <ID>    {return new IdentifierType(t.image);}
+}
+
+/*void TypePrime() :
+{}
+{
+    "[" "]" ("[""]")*
+}*/
+
+Expr Lowest() :
+{
+    Token name;
+    Expr e;
+}
+{
+    name = <ID>        { return new IdentifierExpr( name.image ); }
+|   <TRUE>      { return new TrueExpr(); }
+|   <FALSE>     { return new FalseExpr(); }
+|   <THIS>      { return new ThisExpr(); }
+|   <NULL>      { return new NullExpr(); }
+|   name = <NUM>       { return new IntegerLiteral( Integer.parseInt(name.image) ); }
+|   name = <STRING>    { return new StringLiteral( name.image ); }
+|   "(" e = Expression() ")" {return e;}
+}
+
+
