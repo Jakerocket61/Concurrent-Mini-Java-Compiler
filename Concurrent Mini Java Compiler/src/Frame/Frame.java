@@ -1,17 +1,13 @@
 package Frame;
 
-import java.util.List;
+import java.util.LinkedList;
 
 import javax.rmi.CORBA.Util;
 
 public abstract class Frame {
 
-	public Label name;
-	public List<Access> formals;
-
-	public Access allocFormal() {
-		return new Mips.InReg(new Temp.Temp());
-	}
+	public Temp.Label name;
+	public LinkedList<Access> formals;
 
 	public Access allocFormal() {
 		return new Mips.InReg(new Temp.Temp());
@@ -19,6 +15,6 @@ public abstract class Frame {
 
 	public abstract Access allocLocal(boolean escape);
 
-	public abstract Frame newFrame(Temp.Label name, Util.BoolList formals);
+	public abstract Frame newFrame(Temp.Label name, LinkedList<Boolean> formals);
 
 }

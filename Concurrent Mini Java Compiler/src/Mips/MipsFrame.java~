@@ -1,0 +1,56 @@
+package Mips;
+
+import java.util.linkedList;
+
+public class MipsFrame {
+	
+	public Temp.Label name;
+	public LinkedList<Frame.Access> formals;
+	public LinkedList<Frame.Access> actuals;
+	public int argc;
+
+	public Tree.Stm stmts;
+
+	public MipsFrame(Temp.Label name, LinkedList<boolean> formals){
+		this.name = name;
+		formals = new LinkedList<Frame.Access>();
+		
+		
+
+		argc = 0;
+		for(boolean b : formals){
+
+			allocFormal(b);
+			
+		}
+	}
+
+	public static void initRegs(){
+		for(int i = 0; i < 32; i++){
+			new Temp.Temp();
+		}
+	}
+
+	public Access allocFormal(boolean escape){
+		if(b){
+			formals.add(new InFrame(new Temp.Temp()));
+		}
+		else{
+			formals.add(new InReg(new Temp.Temp()));
+		}
+
+		if(argc < 4){
+			argc = argc + 1;
+			actuals.add(new InReg(new Temp.Temp(argc + 4)));
+		}
+	}
+
+	public Access allocLocal(boolean escape){
+		if(b){
+			formals.add(new InFrame(new Temp.Temp()));
+		}
+		else{
+			formals.add(new InReg(new Temp.Temp()));
+		}
+	}
+}

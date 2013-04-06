@@ -9,9 +9,11 @@ public class Nx extends Exp {
 	}
 
 	Tree.Stm unCx(Temp.Label t, Temp.Label f) {
+		return null;
 	}
 
 	Tree.Exp unEx() {
+		return null;
 	}
 
 	Tree.Stm unNx() {

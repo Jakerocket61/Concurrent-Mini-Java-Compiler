@@ -13,9 +13,9 @@ JAVACC_FLAGS_SEMANT 	= 	-NOSTATIC -OUTPUT_DIRECTORY=Semant/
 
 JAVACC_FLAGS_TRANSLATE 	= 	-OUTPUT_DIRECTORY=Parse/
 
-#JAVACC_GEN_PARSE 	= 	Parse/SimpleCharStream.java 	Parse/ParseException.java 	Parse/Parse.java \
-#        			Parse/ParseConstants.java 	Parse/ParseTokenManager.java 	Parse/Token.java \
-#        			Parse/TokenMgrError.java 
+JAVACC_GEN_PARSE 	= 	Parse/SimpleCharStream.java 	Parse/ParseException.java 	Parse/Parse.java \
+        			Parse/ParseConstants.java 	Parse/ParseTokenManager.java 	Parse/Token.java \
+        			Parse/TokenMgrError.java 
 
 JAVACC_GEN_SEMANT 	= 	Semant/SimpleCharStream.java 		Semant/ParseException.java 		Semant/ReadAbsyn.java \
         				Semant/ReadAbsynConstants.java 		Semant/ReadAbsynTokenManager.java 	Semant/Token.java \
@@ -53,20 +53,23 @@ VISIT    		= 	visitor/Visitable.java 		visitor/Visitor.java 		visitor/PrintVisit
 
 TRANSLATE  		= 	Translate/Cx.java 	Translate/DataFrag.java 	Translate/Ex.java \
 					Translate/Exp.java 	Translate/Frag.java 		Translate/IfThenElseExp.java \
-					Translate/Main.java 	Translate/Nx.java 		Translate/ProcFrag.java 
+					 	Translate/Nx.java 		Translate/ProcFrag.java 
 
 
-SRCS     		= 	$(VISIT) \
-					$(TYPES)	Semant/ReadAbsyn.java		Semant/Main.java \
-					$(TRANSLATE)	Parse/ReadTypes.java		Translate/Main.java 
-					#$(ABSYN) 	Parse/Parse.java 		Parse/Main.java \
+SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) $(TRANSLATE) \
+						Semant/ReadAbsyn.java		Semant/Main.java \
+						Parse/ReadTypes.java		Translate/Main.java \
+					 	Parse/Parse.java 		Parse/Main.java   Translate/Main.java
 
 all:  				$(SRCS:.java=.class)
 
 
 
-#Parse/Parse.java: 		Parse/Parse.jj 
-#				$(JAVACC) $(JAVACC_FLAGS_PARSE) $<
+Parse/Parse.java: 		Parse/Parse.jj 
+				$(JAVACC) $(JAVACC_FLAGS_PARSE) $<
+
+Parse/ReadTypes.java: 		Parse/ReadTypes.jj 
+				$(JAVACC) $(JAVACC_FLAGS_TRANSLATE) $<
 
 Semant/ReadAbsyn.java: 		Semant/ReadAbsyn.jj
 				$(JAVACC) $(JAVACC_FLAGS_SEMANT) $<
@@ -74,8 +77,8 @@ Semant/ReadAbsyn.java: 		Semant/ReadAbsyn.jj
 %.class : 			%.java
 				$(JAVAC) $<
 
-#parser: 		Parse/Parse.class 			Parse/ParseConstants.class 		Parse/ParseTokenManager.class \
-#			Parse/ParseException.class
+parser: 		Parse/Parse.class 			Parse/ParseConstants.class 		Parse/ParseTokenManager.class \
+			Parse/ParseException.class
 
 checker: 		Semant/ReadAbsyn.class 			Semant/ReadAbsynConstants.class 	Semant/ReadAbsynTokenManager.class \
 			Semant/ReadAbsynException.class
@@ -84,11 +87,8 @@ translator:		Parse/ReadTypes.class 		Parse/ReadTypesConstants.class 	Parse/ReadT
 			Parse/ReadTypesException.class 
 
 main: 			Semant/Main.class 		Semant/ReadAbsyn.class \
-			Translate/Main.class		parse/ReadTypes.class	
-	# Parse/Parse.class 		Parse/Main.class \
-
-Parse/ReadTypes.java: 		Parse/ReadTypes.jj 
-				$(JAVACC) $(JAVACC_FLAGS_TRANSLATE) $<
+			Translate/Main.class		parse/ReadTypes.class \	
+	 Parse/Parse.class 		Parse/Main.class
 
 clean: 		
 		rm -f 		$(SRCS:.java=.class) \
@@ -96,7 +96,7 @@ clean:
 				${JAVACC_GEN_TRANSLATE} $(JAVACC_GEN_TRANSLATE:.java=.class) \
 				Parse/Parse*.class \
 				Semant/ReadAbsyn*.class \
-				Parse/ReadTypes*.class
-				#${JAVACC_GEN_PARSE} $(JAVACC_GEN_PARSE:.java=.class) \
+				Parse/ReadTypes*.class \
+				${JAVACC_GEN_PARSE} $(JAVACC_GEN_PARSE:.java=.class)
 
 

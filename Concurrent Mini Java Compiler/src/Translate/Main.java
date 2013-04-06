@@ -2,7 +2,7 @@ package Translate;
 
 import java.io.PrintWriter;
 
-import Parse.ParseException;
+import Semant.ParseException;
 
 public class Main {
 	public static void main(String args[]) {
@@ -32,13 +32,13 @@ public class Main {
 		Absyn.Program parse = null;
 		try {
 			parse = new Parse.ReadTypes(reader).Program();
-		} catch (ParseException p) {
+		} catch (Exception p) {
 			System.err.println(p.toString());
 			System.exit(-1);
 		}
 
-		// Translate translate = new Translate(new Mips.MipsFrame());
-		// parse.accept(translate);
+		Translate translate = new Translate(new Mips.MipsFrame());
+		parse.accept(translate);
 
 		PrintWriter writer = new PrintWriter(System.out);
 		visitor.PrintVisitor pv = new visitor.PrintVisitor(writer);
