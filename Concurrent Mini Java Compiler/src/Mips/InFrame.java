@@ -1,7 +1,7 @@
 package Mips;
 
 public class InFrame extends Frame.Access {
-	Temp.Temp t;
+	public Temp.Temp t;
 	public InFrame(Temp.Temp t){
 		this.t = t;
 	}

@@ -1,13 +1,13 @@
 package Tree;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public class CALL extends Exp implements Hospitable {
 
 	public Exp func;
-	public List<Exp> args;
+	public LinkedList<Exp> args;
 
-	public CALL(Exp f, List<Exp> a) {
+	public CALL(Exp f, LinkedList<Exp> a) {
 		func = f;
 		args = a;
 	}

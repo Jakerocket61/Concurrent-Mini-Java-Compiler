@@ -1,7 +1,7 @@
 package Mips;
 
 public class InReg extends Frame.Access {
-	Temp.Temp t;
+	public Temp.Temp t;
 	public InReg(Temp.Temp t){
 		this.t = t;
 	}

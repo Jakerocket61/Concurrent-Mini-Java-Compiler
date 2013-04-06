@@ -27,4 +27,9 @@ public abstract class BinOpExpr extends Expr implements Visitable {
 		v.visit(this);
 	}
 
+	public Translate.Exp accept(Translate.Translate t){
+		return t.visit(this);
+	}
+
 }
+

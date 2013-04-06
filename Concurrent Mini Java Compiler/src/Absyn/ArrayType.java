@@ -23,4 +23,9 @@ public class ArrayType extends Type implements Visitable {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
+
+	public Translate.Exp accept(Translate.Translate t){
+		return t.visit(this);
+	}
 }
+

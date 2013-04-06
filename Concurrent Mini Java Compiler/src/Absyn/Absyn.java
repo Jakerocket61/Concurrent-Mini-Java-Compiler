@@ -15,4 +15,8 @@ public class Absyn implements Visitable {
 
 	public void accept(Visitor v) {
 	}
+
+	public Translate.Exp accept(Translate.Translate t){
+		return t.visit(this);
+	}
 }
