@@ -131,7 +131,7 @@ public class Canon
 	{
 		Tree.Stm stms = do_stm(e.stm);
 		Tree.Exp a = e.exp;
-		Tree.ESEQ b = do_exp(e.exp);
+		Tree.ESEQ b = do_exp(a);
 		return new Tree.ESEQ(seq(stms, b.stm), b.exp);
     }
 

@@ -1,5 +1,7 @@
 package Tree;
 
+import java.util.LinkedList;
+
 
 public class BINOP extends Exp implements Hospitable {
 
@@ -17,5 +19,16 @@ public class BINOP extends Exp implements Hospitable {
 
 	public void accept(IntVisitor v, int d) {
 		v.visit(this, d);
+	}
+	
+	public LinkedList<Exp> kids() {	
+		LinkedList<Exp> kids = new LinkedList<Exp>();
+		kids.add(left);
+		kids.add(right);
+		return kids;
+	}
+
+	public Exp build(LinkedList<Exp> kids) {
+		return new BINOP(binop, kids.getFirst(), kids.getLast());
 	}
 }

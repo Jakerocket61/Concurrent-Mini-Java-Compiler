@@ -8,7 +8,8 @@ public interface IntVisitor {
 	public void visit(CALL n, int d);
 	public void visit(CJUMP n, int d);
 	public void visit(CONST n, int d);
-	public void visit(ESEQ n, int d);/*	public void visit(Exp n, int d);*/
+	public void visit(ESEQ n, int d);
+	public void visit(EXP exp, int d);
 	public void visit(JUMP n, int d);
 	public void visit(LABEL n, int d);
 	public void visit(MEM n, int d);

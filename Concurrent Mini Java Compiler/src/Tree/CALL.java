@@ -19,4 +19,15 @@ public class CALL extends Exp implements Hospitable {
 	public void accept(IntVisitor v, int d) {
 		v.visit(this, d);
 	}
+
+	public LinkedList<Exp> kids() {
+		LinkedList<Exp> kids = new LinkedList<Exp>();
+		kids.add(func);
+		kids.addAll(args);
+		return kids;
+	}
+
+	public Exp build(LinkedList<Exp> kids) {
+		return new CALL(kids.remove(), kids);
+	}
 }
