@@ -333,4 +333,16 @@ public class Translate implements Visitor {
 
 		return new Nx(new Tree.CALL(new Tree.NAME(ast.name), e));
 	}
+
+	@Override
+	public Exp visit(FieldExpr ast) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Exp visit(IdentifierExpr ast) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
