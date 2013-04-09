@@ -8,7 +8,7 @@ public class CombineMap implements TempMap {
 		tmap2 = t2;
 	}
 
-	public String tempMap(Temp.Temp t) {
+	public String tempMap(Temp t) {
 		String s = tmap1.tempMap(t);
 		if (s != null)
 			return s;

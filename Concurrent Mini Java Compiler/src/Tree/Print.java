@@ -2,14 +2,17 @@ package Tree;
 
 import java.util.LinkedList;
 
+import Temp.DefaultMap;
+import Temp.TempMap;
+
 public class Print implements IntVisitor {
 
 	java.io.PrintStream out;
-	Stm st;
+	Stm st = null;
 
 	public Print(java.io.PrintStream o) {
 		out = o;
-		st = new Stm();
+		//st = new Stm();
 	}
 
 	public Print(java.io.PrintStream o, Stm s) {
@@ -36,7 +39,7 @@ public class Print implements IntVisitor {
 		say("\n");
 	}
 
-	void visit(BINOP e, int d) {
+	public void visit(BINOP e, int d) {
 		indent(d);
 		say("BINOP(");
 
@@ -82,20 +85,23 @@ public class Print implements IntVisitor {
 		say(")");
 	}
 
-	void visit(CALL e, int d) {
+	public void visit(CALL e, int d) {
 		indent(d);
 		sayln("CALL(");
 		visit(e.func, d + 1);
 
-		for (LinkedList<Exp> a = e.args; a != null; a = a.tail) {
+		//for (LinkedList<Exp> a = e.args; a != null; a = a.getLast()) {
+		for (Exp a : e.args)
+		{
 			sayln(",");
-			visit(a.head, d + 2);
+			//visit(a.head, d + 2);
+			visit(a, d + 2);
 		}
 
 		say(")");
 	}
 
-	void visit(CJUMP s, int d) {
+	public void visit(CJUMP s, int d) {
 		indent(d);
 		say("CJUMP(");
 
@@ -146,13 +152,13 @@ public class Print implements IntVisitor {
 		say(")");
 	}
 
-	void visit(CONST e, int d) {
+	public void visit(CONST e, int d) {
 		indent(d);
 		say("CONST ");
 		say(String.valueOf(e.value));
 	}
 
-	void visit(ESEQ e, int d) {
+	public void visit(ESEQ e, int d) {
 		indent(d);
 		sayln("ESEQ(");
 		visit(e.stm, d + 1);
@@ -161,7 +167,7 @@ public class Print implements IntVisitor {
 		say(")");
 	}
 
-	void visit(Exp e, int d) {
+	public void visit(Exp e, int d) {
 		if (e instanceof BINOP)
 			visit((BINOP) e, d);
 		else if (e instanceof MEM)
@@ -180,34 +186,34 @@ public class Print implements IntVisitor {
 			throw new Error("Print.prExp");
 	}
 
-	void visit(EXP s, int d) {
+	public void visit(EXP s, int d) {
 		indent(d);
 		sayln("EXP(");
 		visit(s.exp, d + 1);
 		say(")");
 	}
 
-	void visit(JUMP s, int d) {
+	public void visit(JUMP s, int d) {
 		indent(d);
 		sayln("JUMP(");
 		visit(s.exp, d + 1);
 		say(")");
 	}
 
-	void visit(LABEL s, int d) {
+	public void visit(LABEL s, int d) {
 		indent(d);
 		say("LABEL ");
 		say(s.label.toString());
 	}
 
-	void visit(MEM e, int d) {
+	public void visit(MEM e, int d) {
 		indent(d);
 		sayln("MEM(");
 		visit(e.exp, d + 1);
 		say(")");
 	}
 
-	void visit(MOVE s, int d) {
+	public void visit(MOVE s, int d) {
 		indent(d);
 		sayln("MOVE(");
 		visit(s.dst, d + 1);
@@ -216,13 +222,13 @@ public class Print implements IntVisitor {
 		say(")");
 	}
 
-	void visit(NAME e, int d) {
+	public void visit(NAME e, int d) {
 		indent(d);
 		say("NAME ");
 		say(e.label.toString());
 	}
 
-	void visit(SEQ s, int d) {
+	public void visit(SEQ s, int d) {
 		indent(d);
 		sayln("SEQ(");
 		visit(s.left, d + 1);
@@ -253,9 +259,10 @@ public class Print implements IntVisitor {
 			throw new Error("Print.prStm");
 	}
 
-	void visit(TEMP e, int d) {
+	public void visit(TEMP e, int d) {
 		indent(d);
 		say("TEMP ");
+		DefaultMap tmap = new DefaultMap();
 		say(tmap.tempMap(e.temp));
 	}
 }
