@@ -32,3 +32,4 @@ public class BINOP extends Exp implements Hospitable {
 		return new BINOP(binop, kids.getFirst(), kids.getLast());
 	}
 }
+
