@@ -21,11 +21,7 @@ public abstract class Expr extends Absyn implements Visitable {
 		v.visit(this);
 	}
 	
-	public Translate.Exp accept(Translate.Translate t){
-		return t.visit(this);
-	}
-
-	public Translate.Exp accept(Translate.Translate t){
+	public Translate.Exp accept(Translate.Translate t) {
 		return t.visit(this);
 	}
 

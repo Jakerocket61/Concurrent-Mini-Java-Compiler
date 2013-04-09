@@ -37,23 +37,27 @@ public class Translate implements Visitor {
 	}
 
     public Exp visit(ArrayExpr ast){
-		return new Ex(new Tree.BINOP(Tree.BINOP.ADD, new Tree.TEMP
+		return new Ex(new Tree.MEM(new Tree.BINOP(Tree.BINOP.ADD, ast.target.accept(this).unEx(), ast.index.accept(this).unEx())));
 	} 
 
-	public Exp visit(ArrayType ast){ return null; }
+	public Exp visit(ArrayType ast){ 
+		return null; 
+	}
 
-	public Exp visit(AssignStmt ast){
-		
+	public Exp visit(AssignStmt ast) {
+		return null;
 	} 
 	
-    public Exp visit(BinOpExpr ast){
-    	 return new Ex();
+    public Exp visit(BinOpExpr ast) {
+    	//return new Ex();
+    	return null;
     }
      
-	public Exp visit(BlockStmt ast){	
+	public Exp visit(BlockStmt ast) {	
 		for(Stmt s : ast.stmts){
 			
 		}
+		return null;
 	} 
      
 	public Exp visit(BooleanType ast){ return null; } 
