@@ -46,23 +46,25 @@ public class Translate implements Visitor {
 
 	public Exp visit(AssignStmt ast) {
 		return null;
-	} 
+	}
 	
     public Exp visit(BinOpExpr ast) {
     	//return new Ex();
     	return null;
     }
      
-	public Exp visit(BlockStmt ast) {	
+	public Exp visit(BlockStmt ast) {
 		for(Stmt s : ast.stmts){
 			
 		}
 		return null;
 	} 
      
-	public Exp visit(BooleanType ast){ return null; } 
+	public Exp visit(BooleanType ast) { 
+		return null;
+	}
     
-	public Exp visit(CallExpr ast){
+	public Exp visit(CallExpr ast) {
 		LinkedList<Exp> e = new LinkedList<Exp>();
 
 		for(Expr temp : ast.args){
@@ -72,7 +74,7 @@ public class Translate implements Visitor {
 		return new Ex(new Tree.CALL(new Tree.NAME(ast.name), e));
 	}
 
-     public LinkedList<Frag> visit(ClassDecl ast){
+     public LinkedList<Frag> visit(ClassDecl ast ){
 		LinkedList<Frag> out = new LinkedList<Frag>();
 		for(MethodDecl m : ast.methods){
 			out.add(m.accept(this));
