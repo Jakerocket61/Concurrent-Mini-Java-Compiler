@@ -1,8 +1,10 @@
 package Mips;
 
+import java.util.List;
 import java.util.ListIterator;
 
 import Assem.Instr;
+import Temp.Label;
 import Temp.Temp;
 import Tree.BINOP;
 import Tree.CALL;
@@ -30,9 +32,29 @@ public class Codegen implements CodeVisitor {
 		this.code = code;
 	}
 	
-	public void exit(Instr inst)
+	public void emit(Instr inst)
 	{
-		
+		code.add(inst);
+	}
+	
+	static Assem.Instr OPER(String a, Temp[] d, Temp[] s, List<Label> j)
+	{
+		return new Assem.OPER("\t" + a, d, s, j);
+	}
+	
+	static Assem.Instr OPER(String a, Temp[] d, Temp[] s)
+	{
+		return OPER(a, d, s, null);
+	}
+	
+	static Instr MOVE(String a, Temp d, Temp s)
+	{
+		return new Assem.MOVE("\t" + a, d, s);
+	}
+	
+	public static boolean CONST16(Tree.CONST c)
+	{
+		return c.value == (short)c.value;
 	}
 	
 	@Override
