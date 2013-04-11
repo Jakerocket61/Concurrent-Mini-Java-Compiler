@@ -9,6 +9,13 @@ public class MipsFrame {
 	public LinkedList<Frame.Access> actuals;
 	public int argc;
 
+	public MipsFrame() {
+		this.name = null;
+		this.formals = new LinkedList<Frame.Access>();
+		this.actuals = new LinkedList<Frame.Access>();
+
+		this.argc = 0;
+	}
 
 	public MipsFrame(Temp.Label name, LinkedList<Boolean> formals) {
 		this.name = name;
