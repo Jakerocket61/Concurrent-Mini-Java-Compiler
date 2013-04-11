@@ -5,13 +5,13 @@ import java.util.LinkedList;
 
 public abstract class Stm implements Hospitable {
 
-	public LinkedList<Stm> kids() {
+	public LinkedList<Exp> kids() {
 		return null;
 	}
 	// abstract public LinkedList<Exp> kids();
 	// abstract public Stm build(LinkedList<Exp> kids);
 
-	public Stm build(LinkedList<Stm> exps) {
+	public Stm build(LinkedList<Exp> exps) {
 		return null;
 	}
 

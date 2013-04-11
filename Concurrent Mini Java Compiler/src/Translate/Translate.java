@@ -8,7 +8,7 @@ public class Translate implements Visitor {
 	
 	public Types.Table<Temp.Temp> table;
 
-	public Translate(){
+	public Translate() {
 		table = new Types.Table<Temp.Temp>();
 	}
 
@@ -17,7 +17,7 @@ public class Translate implements Visitor {
     	return null;
     }
 	
-	public Exp visit(AddExpr ast){
+	public Exp visit(AddExpr ast) {
 		Tree.Exp e1 = ast.e1.accept(this).unEx();
 		Tree.Exp e2 = ast.e2.accept(this).unEx();
 		Temp.Temp t1 = new Temp.Temp();
@@ -26,7 +26,7 @@ public class Translate implements Visitor {
 		return new Ex(new Tree.BINOP(Tree.BINOP.PLUS, new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t1), e1), new Tree.TEMP(t1)), new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t2), e2), new Tree.TEMP(t2))));
 	}
 
-     public Exp visit(AndExpr ast){
+     public Exp visit(AndExpr ast) {
 		Tree.Exp e1 = ast.e1.accept(this).unEx();
 		Tree.Exp e2 = ast.e2.accept(this).unEx();
 		Temp.Temp t1 = new Temp.Temp();
@@ -36,11 +36,11 @@ public class Translate implements Visitor {
 		return new Ex(new Tree.BINOP(Tree.BINOP.AND, new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t1), e1), new Tree.TEMP(t1)), new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t2), e2), new Tree.TEMP(t2))));
 	}
 
-    public Exp visit(ArrayExpr ast){
+    public Exp visit(ArrayExpr ast) {
 		return new Ex(new Tree.MEM(new Tree.BINOP(Tree.BINOP.ADD, ast.target.accept(this).unEx(), ast.index.accept(this).unEx())));
 	} 
 
-	public Exp visit(ArrayType ast){ 
+	public Exp visit(ArrayType ast) { 
 		return null; 
 	}
 
@@ -54,7 +54,7 @@ public class Translate implements Visitor {
     }
      
 	public Exp visit(BlockStmt ast) {
-		for(Stmt s : ast.stmts){
+		for(Stmt s : ast.stmts) {
 			
 		}
 		return null;
@@ -67,11 +67,11 @@ public class Translate implements Visitor {
 	public Exp visit(CallExpr ast) {
 		LinkedList<Exp> e = new LinkedList<Exp>();
 
-		for(Expr temp : ast.args){
+		for(Expr temp : ast.args) {
 			e.add(temp.accept(this));
 		}
 
-		return new Ex(new Tree.CALL(new Tree.NAME(ast.name), e));
+		return new Ex(new Tree.CALL(new Ex(Tree.NAME(ast.name)), e));
 	}
 
      public LinkedList<Frag> visit(ClassDecl ast ){

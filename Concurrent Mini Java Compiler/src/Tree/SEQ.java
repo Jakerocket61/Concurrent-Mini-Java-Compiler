@@ -16,14 +16,11 @@ public class SEQ extends Stm implements Hospitable {
 		v.visit(this, d);
 	}
 	
-	public LinkedList<Stm> kids() {	
-		LinkedList<Stm> kids = new LinkedList<Stm>();
-		kids.add(left);
-		kids.add(right);
-		return kids;
+	public LinkedList<Exp> kids() {	
+		throw new Error("kids() not applicable to SEQ");
 	}
 
-	public Stm build(LinkedList<Stm> kids) {
-		return new SEQ(kids.getFirst(), kids.getLast());
+	public Stm build(LinkedList<Exp> kids) {
+		throw new Error("build() not applicable to SEQ");
 	}
 }
