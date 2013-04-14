@@ -1,6 +1,9 @@
 package Translate;
 
+import Temp.Label;
 import Tree.CJUMP;
+import Tree.LABEL;
+import Tree.Stm;
 
 public class RelCx extends Cx {
 
@@ -20,4 +23,11 @@ public class RelCx extends Cx {
 	Tree.Stm unCx(Label t, Label f) {
 		return new Tree.CJUMP(op, left, right, t, f);
 	}
+
+	@Override
+	Stm unCx(LABEL t, LABEL f) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

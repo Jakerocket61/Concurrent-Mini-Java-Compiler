@@ -71,7 +71,7 @@ public class Translate implements Visitor {
 			e.add(temp.accept(this));
 		}
 
-		return new Ex(new Tree.CALL(new Ex(Tree.NAME(ast.name)), e));
+		return new Ex(new Tree.CALL(new Translate.Exp(Tree.NAME(ast.name)), e));
 	}
 
     public LinkedList<Frag> visit(ClassDecl ast ){
@@ -165,7 +165,7 @@ public class Translate implements Visitor {
 		Temp.Temp t1 = new Temp.Temp();
 		Temp.Temp t2 = new Temp.Temp();
 		
-		return new Cx(new Tree.CJUMP(Tree.CJUMP.LT, new Tree.TEMP(t1), new Tree.TEMP(t2), ));
+		return new RelCx(new Tree.CJUMP(Tree.CJUMP.LT, new Tree.TEMP(t1), new Tree.TEMP(t2), ));
 	} 
 
 	public Frag visit(MethodDecl ast){
@@ -320,14 +320,14 @@ public class Translate implements Visitor {
 
 		Tree.Stm ret = null;
 
-		for(Stmt s : ast.stmts){
-			ret = new Nx(new Tree.SEQ(ret.unNx(), s.accept(this)));
+		for(Stmt s : ast.stmts) {
+			ret = (new Nx(new Tree.SEQ(ret, s.accept(this).unNx()))).unNx();;
 		}
 		
 		return new ProcFrag(ret.unNx(), m);
 	}
      
-    public Exp visit(WhileStmt ast){
+    public Exp visit(WhileStmt ast) {
 		
 	}
      
