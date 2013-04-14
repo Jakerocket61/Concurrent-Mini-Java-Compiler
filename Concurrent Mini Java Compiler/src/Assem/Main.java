@@ -83,7 +83,7 @@ public class Main
 
 		try
 	    {
-			frags = new Parse.ReadFrags(reader).Program();
+			frags = new Assem.ReadFrags(reader).Program();
 	    }
 		catch (ParseException p)
 	    {

@@ -1,5 +1,6 @@
 package Tree;
 
+import java.io.PrintWriter;
 import java.util.LinkedList;
 
 import Temp.DefaultMap;
@@ -15,8 +16,8 @@ public class Print implements IntVisitor {
 		//st = new Stm();
 	}
 
-	public Print(java.io.PrintStream o, Stm s) {
-		out = o;
+	public Print(PrintWriter writer, Stm s) {
+		out = writer;
 		st = s;
 	}
 
