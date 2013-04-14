@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="true" key="CommitDialog.showUntracked"/>
+	<list key="CommitDialog.authorValues">
+		<item value="Jack Batzner &lt;jack.batzner@marquette.edu&gt;"/>
+	</list>
+	<list key="CommitDialog.committerValues">
+		<item value="Jack Batzner &lt;jack.batzner@marquette.edu&gt;"/>
+	</list>
+	<list key="RepositorySelectionPage.UsedUris">
+		<item value="git@github.com:jackbatzner/Concurrent-Mini-Java-Compiler.git"/>
+		<item value="ssh://git@github.com/jackbatzner/Concurrent-Mini-Java-Compiler.git"/>
+		<item value="jackbatzner@github.com:jackbatzner/Concurrent-Mini-Java-Compiler.git"/>
+		<item value="ssh://jackbatzner@github.com/jackbatzner/Concurrent-Mini-Java-Compiler.git"/>
+	</list>
+	<section name="GitImportWizard">
+	</section>
+	<section name="GitCommitMessageComponent">
+	</section>
+	<section name="org.eclipse.egit.ui.internal.dialogs.RebaseTargetSelectionDialog.dialogBounds">
+		<item value="525" key="DIALOG_WIDTH"/>
+		<item value="217" key="DIALOG_Y_ORIGIN"/>
+		<item value="462" key="DIALOG_HEIGHT"/>
+		<item value="578" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="PushToGerritPage">
+	</section>
+	<section name="org.eclipse.egit.ui.internal.fetch.FetchResultDialog.dialogBounds">
+		<item value="600" key="DIALOG_WIDTH"/>
+		<item value="232" key="DIALOG_Y_ORIGIN"/>
+		<item value="440" key="DIALOG_HEIGHT"/>
+		<item value="540" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.push.PushResultDialog.dialogBounds">
+		<item value="650" key="DIALOG_WIDTH"/>
+		<item value="183" key="DIALOG_Y_ORIGIN"/>
+		<item value="515" key="DIALOG_X_ORIGIN"/>
+		<item value="440" key="DIALOG_HEIGHT"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="FetchGerritChangePage">
+	</section>
+</section>

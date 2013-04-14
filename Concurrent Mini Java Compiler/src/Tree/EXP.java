@@ -1,16 +1,22 @@
 package Tree;
 
-public class EXP extends Stm implements Hospitable {
+import java.util.LinkedList;
 
-	public Exp exp;
-	
-	public EXP(Tree.Exp exp) {
-		this.exp = exp;
+
+public class Exp implements Hospitable {
+
+	public Exp() {
 	}
 
-	@Override
 	public void accept(IntVisitor v, int d) {
 		v.visit(this, d);
 	}
+	
+	public LinkedList<Exp> kids() {
+		return new LinkedList<Exp>();
+	}
 
+	public Exp build(LinkedList<Exp> exps) {
+		return new Tree.Exp();
+	}
 }
