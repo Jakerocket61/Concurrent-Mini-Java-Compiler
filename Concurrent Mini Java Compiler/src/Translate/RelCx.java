@@ -1,5 +1,7 @@
 package Translate;
 
+import Tree.CJUMP;
+
 public class RelCx extends Cx {
 
 	int op;
@@ -9,6 +11,10 @@ public class RelCx extends Cx {
 		op = operation;
 		left = l;
 		right = r;
+	}
+
+	public RelCx(CJUMP cjump) {
+		// TODO Auto-generated constructor stub
 	}
 
 	Tree.Stm unCx(Label t, Label f) {

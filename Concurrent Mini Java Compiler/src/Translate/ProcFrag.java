@@ -1,15 +1,14 @@
 package Translate;
 
 import Frame.Frame;
-import Tree.Stm;
 
 public class ProcFrag extends Frag {
 
-	Stm statement;
-	Frame frame;
-
-	public ProcFrag(Stm s, Frame f) {
-		statement = s;
-		frame = f;
+	public Frame frame;
+	public Tree.Stm body;
+	
+	public ProcFrag(Tree.Stm body, Frame frame) {
+		this.body = body;
+		this.frame = frame;
 	}
 }

@@ -74,7 +74,7 @@ public class Translate implements Visitor {
 		return new Ex(new Tree.CALL(new Ex(Tree.NAME(ast.name)), e));
 	}
 
-     public LinkedList<Frag> visit(ClassDecl ast ){
+    public LinkedList<Frag> visit(ClassDecl ast ){
 		LinkedList<Frag> out = new LinkedList<Frag>();
 		for(MethodDecl m : ast.methods){
 			out.add(m.accept(this));
@@ -91,8 +91,12 @@ public class Translate implements Visitor {
 	
 		return new Ex(new Tree.BINOP(Tree.BINOP.DIV, new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t1), e1), new Tree.TEMP(t1)), new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t2), e2), new Tree.TEMP(t2))));
 	}
-     public Exp visit(Expr ast){ return null; }
-     public Exp visit(EqualExpr ast){
+	
+    public Exp visit(Expr ast){ 
+    	return null; 
+    }
+    
+    public Exp visit(EqualExpr ast){
 		Tree.Exp e1 = ast.e1.accept(this).unEx();
 		Tree.Exp e2 = ast.e2.accept(this).unEx();
 		Temp.Temp t1 = new Temp.Temp();
@@ -100,7 +104,8 @@ public class Translate implements Visitor {
 		
 		return new Cx(new Tree.CJUMP(Tree.CJUMP.EQ, new Tree.TEMP(t1), new Tree.TEMP(t2), ));
 	} 
-     public Exp visit(FalseExpr ast){
+     
+    public Exp visit(FalseExpr ast){
 		return new Ex(new CONST(0));
 	}
  
@@ -115,9 +120,9 @@ public class Translate implements Visitor {
 						new ESEQ(new Tree.LABEL(ok), new Tree.MEM(new Tree.BINOP(Tree.BINOP.PLUS, new Tree.TEMP(result), new Tree.CONST(index))));
 	}
 
-     public Exp visit(Formal ast){return null;} 
+    public Exp visit(Formal ast){return null;} 
 
-     public Exp visit(GreaterExpr ast) {
+    public Exp visit(GreaterExpr ast) {
 		Tree.Exp e1 = ast.e1.accept(this).unEx();
 		Tree.Exp e2 = ast.e2.accept(this).unEx();
 		Tree.Temp t1 = new Temp.Temp();
@@ -140,6 +145,7 @@ public class Translate implements Visitor {
 	public Exp visit(IdentifierType ast){
 		return null;
 	}
+	
 	public Exp visit(IfStmt ast){
 		return new IfThenElseExp(ast.test.accept(this), ast.thenStm.accept(this), ast.elseStm(this));
 	}
@@ -198,11 +204,17 @@ public class Translate implements Visitor {
 		return new Ex(new Tree.BINOP(Tree.BINOP.MUL, new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t1), e1), new Tree.TEMP(t1)), new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t2), e2), new Tree.TEMP(t2))));
 	}
 
-    public Exp visit(NegExpr ast){}
+    public Exp visit(NegExpr ast) {
+		return null;
+    }
     
-    public Exp visit(NewArrayExpr ast){}
+    public Exp visit(NewArrayExpr ast) {
+    	return null;
+    }
      
-    public Exp visit(NewObjectExpr ast){} 
+    public Exp visit(NewObjectExpr ast) {
+    	return null;
+    } 
      
      
     public Exp visit(NotEqExpr ast){
@@ -211,12 +223,11 @@ public class Translate implements Visitor {
 		Temp.Temp t1 = new Temp.Temp();
 		Temp.Temp t2 = new Temp.Temp();
 		
-		return new Cx(new Tree.CJUMP(Tree.CJUMP.NQ, new Tree.TEMP(t1), new Tree.TEMP(t2), ));
-
+		return new RelCx(new Tree.CJUMP(Tree.CJUMP.NE, new Tree.TEMP(t1), new Tree.TEMP(t2), ));
 	}
      
     public Exp visit(NotExpr ast){
-		
+    	return null;
 	} 
      
 	public Exp visit(NullExpr ast){

@@ -1,6 +1,6 @@
 package Translate;
 
-public class DataFrag {
+public class DataFrag extends Frag {
 
 	String data;
 

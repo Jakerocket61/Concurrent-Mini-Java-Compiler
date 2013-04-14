@@ -1,8 +1,9 @@
 package Frame;
 
 import java.util.LinkedList;
+import java.util.List;
 
-import javax.rmi.CORBA.Util;
+import Tree.Stm;
 
 public abstract class Frame {
 
@@ -16,5 +17,12 @@ public abstract class Frame {
 	public abstract Access allocLocal(boolean escape);
 
 	public abstract Frame newFrame(Temp.Label name, LinkedList<Boolean> formals);
+
+	public void procEntryExit1(List<Stm> traced) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	abstract public Tree.Stm procEntryExit1(Tree.Stm body);
 
 }
