@@ -16,21 +16,21 @@ public class MOVE extends Stm implements Hospitable {
 		v.visit(this, d);
 	}
 	
-	public LinkedList<Exp> kids() {	
-		
-		kids.add(dst);
-		kids.add(src);
-		return kids;
-		
+	public LinkedList<Exp> kids() {
 		LinkedList<Exp> kids = new LinkedList<Exp>();
-		
-		if (dst instanceof MEM)
-		{
-			
+		if (dst instanceof MEM){
+			kids.add(((MEM)dst).exp); 
+			kids.add(src);
 		}
+		else 
+			kids.add(src);
+		return kids;
 	}
 
-	public Exp build(LinkedList<Exp> kids) {
-		return new BINOP(binop, kids.getFirst(), kids.getLast());
+	public Stm build(LinkedList<Exp> kids) {
+		if (dst instanceof MEM)
+			return new MOVE(new MEM(kids.getFirst()), kids.get(1));
+		else 
+			return new MOVE(dst, kids.getFirst());
 	}
 }

@@ -2,12 +2,25 @@ package Mips;
 
 import java.util.LinkedList;
 
-public class MipsFrame {
+import Temp.Label;
+import Tree.Stm;
+
+public class MipsFrame extends Frame.Frame {
 	
 	public Temp.Label name;
 	public LinkedList<Frame.Access> formals;
 	public LinkedList<Frame.Access> actuals;
 	public int argc;
+	
+	public static Temp.Temp registers[] = {new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp()
+											};
 
 	public MipsFrame() {
 		this.name = null;
@@ -65,5 +78,17 @@ public class MipsFrame {
 		}
 		
 		return formals.getLast();
+	}
+
+	@Override
+	public Frame.Frame newFrame(Label name, LinkedList<Boolean> formals) {
+		
+		return null;
+	}
+
+	@Override
+	public Stm procEntryExit1(Stm body) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

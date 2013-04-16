@@ -37,7 +37,7 @@ public class Main {
 			System.exit(-1);
 		}
 
-		Translate translate = new Translate(new Mips.MipsFrame());
+		Translate translate = new Translate();
 		parse.accept(translate);
 
 		PrintWriter writer = new PrintWriter(System.out);

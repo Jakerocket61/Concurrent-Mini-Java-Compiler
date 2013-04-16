@@ -13,7 +13,7 @@ JAVACC_FLAGS_SEMANT 	= 	-NOSTATIC -OUTPUT_DIRECTORY=Semant/
 
 JAVACC_FLAGS_TRANSLATE 	= 	-OUTPUT_DIRECTORY=Parse/
 
-JAVACC_FLAGS_ASSEM 	= 	-OUTPUT_DIRECTORY=Assem/
+JAVACC_FLAGS_ASSEM 	= 	-OUTPUT_DIRECTORY=Parse/
 
 JAVACC_GEN_PARSE 	= 	Parse/SimpleCharStream.java 	Parse/ParseException.java 		Parse/Parse.java \
         				Parse/ParseConstants.java 		Parse/ParseTokenManager.java 	Parse/Token.java \
@@ -27,9 +27,9 @@ JAVACC_GEN_TRANSLATE 	= 	Parse/SimpleCharStream.java 	Parse/ParseException.java 
         					Parse/ReadTypesConstants.java 	Parse/ReadTypesTokenManager.java 	Parse/Token.java \
         					Parse/TokenMgrError.java 
         					
-JAVACC_GEN_ASSEM 	= 		Assem/SimpleCharStream.java 	Assem/ParseException.java 			Assem/ReadFrags.java \
-							Assem/ReadFragsConstants.java 	Assem/ReadFragsTokenManager.java 	Assem/Token.java \
-							Assem/TokenMgrError.java 
+JAVACC_GEN_ASSEM 	= 		Parse/SimpleCharStream.java 	Parse/ParseException.java 			Parse/ReadFrags.java \
+							Parse/ReadFragsConstants.java 	Parse/ReadFragsTokenManager.java 	Parse/Token.java \
+							Parse/TokenMgrError.java 
 
 ABSYN    		= 	Absyn/Absyn.java 			Absyn/AddExpr.java 			Absyn/AndExpr.java \
 					Absyn/ArrayExpr.java 		Absyn/ArrayType.java 		Absyn/AssignableExpr.java \
@@ -62,16 +62,28 @@ TRANSLATE  		= 	Translate/Cx.java 		Translate/DataFrag.java 	Translate/Ex.java \
 					Translate/Nx.java 		Translate/ProcFrag.java 
 					
 ASSEM			= 	Assem/Instr.java			Assem/LABEL.java		Assem/MOVE.java	\
-					Assem/OPER.java				Canon.java 			Canon/Canon.java \
-					Canon/TraceSchedule.java 	Mips/Codegen.java	Mips/InFrame.java \
-					Mips/InReg.java 			Mips/MipsFrame.java	
+					Assem/OPER.java				Canon/Canon.java 			Canon/Canon.java \
+					Canon/TraceSchedule.java 		Mips/InFrame.java 		Mips/InReg.java \
+					Mips/MipsFrame.java
+
+TREE			=	Tree/BINOP.java				Tree/CALL.java			Tree/CJUMP.java \
+					Tree/CONST.java			Tree/ESEQ.java			Tree/Exp.java \
+					Tree/EXP.java			Tree/Hospitable.java			Tree/IntVisitor.java	\
+					Tree/JUMP.java			Tree/LABEL.java			Tree/MEM.java	\
+					Tree/MOVE.java			Tree/NAME.java			Tree/Print.java	\
+					Tree/SEQ.java			Tree/Stm.java			Tree/TEMP.java	
 
 
-SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) $(TRANSLATE) $(ASSEM)\
-						Semant/ReadAbsyn.java		Semant/Main.java \
-						Parse/ReadTypes.java		Translate/Main.java \
-					 	Parse/Parse.java 			Parse/Main.java   \
-					 	Assem/ReadFrags.java		Assem/Main.java		
+TEMP			=	Temp/CombineMap.java			Temp/DefaultMap.java		Temp/Label.java \
+				Temp/LabelList.java			Temp/Temp.java			Temp/TempList.java \
+				Temp/TempMap.java		
+
+
+SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) $(TREE) $(TEMP) $(TRANSLATE) $(ASSEM) \
+					Semant/ReadAbsyn.java		Semant/Main.java \
+					Parse/ReadTypes.java		Translate/Main.java \
+					Parse/Parse.java 			Parse/Main.java   \
+					Parse/ReadFrags.java		Assem/Main.java		
 
 all:  				$(SRCS:.java=.class)
 
@@ -84,7 +96,7 @@ Parse/ReadTypes.java: 		Parse/ReadTypes.jj
 Semant/ReadAbsyn.java: 		Semant/ReadAbsyn.jj
 				$(JAVACC) $(JAVACC_FLAGS_SEMANT) $<
 
-Assem/ReadFrags.java: 		Assem/ReadFrags.jj
+Parse/ReadFrags.java: 		Parse/ReadFrags.jj
 				$(JAVACC) $(JAVACC_FLAGS_ASSEM) $<
 
 %.class : 			%.java

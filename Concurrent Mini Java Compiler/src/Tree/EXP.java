@@ -3,9 +3,12 @@ package Tree;
 import java.util.LinkedList;
 
 
-public class Exp implements Hospitable {
+public class EXP extends Stm implements Hospitable {
 
-	public Exp() {
+	public Exp exp;
+	
+	public EXP(Exp e) {
+		exp = e;
 	}
 
 	public void accept(IntVisitor v, int d) {
@@ -16,7 +19,7 @@ public class Exp implements Hospitable {
 		return new LinkedList<Exp>();
 	}
 
-	public Exp build(LinkedList<Exp> exps) {
-		return new Tree.Exp();
+	public Stm build(LinkedList<Exp> exps) {
+		return null;
 	}
 }
