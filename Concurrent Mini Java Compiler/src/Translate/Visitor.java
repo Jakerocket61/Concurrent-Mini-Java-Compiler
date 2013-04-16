@@ -37,7 +37,7 @@ public interface Visitor {
      Exp visit(NotExpr ast); 
      Exp visit(NullExpr ast); 
      Exp visit(OrExpr ast); 
-     LinkedList<Frag> visit(Program ast); 
+     LinkedList<Exp> visit(Program ast); 
      Exp visit(StringLiteral ast); 
      Exp visit(Stmt ast);
      Exp visit(SubExpr ast); 

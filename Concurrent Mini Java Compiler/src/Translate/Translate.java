@@ -233,8 +233,11 @@ public class Translate implements Visitor {
 		Tree.Exp e2 = ast.e2.accept(this).unEx();
 		Temp.Temp t1 = new Temp.Temp();
 		Temp.Temp t2 = new Temp.Temp();
+
+		Temp.Label l1 = new Temp.Label();
+		Temp.Label l2 = new Temp.Label();
 		
-		return new RelCx(new Tree.CJUMP(Tree.CJUMP.NE, new Tree.TEMP(t1), new Tree.TEMP(t2), e1, e2));
+		return new RelCx(new Tree.CJUMP(Tree.CJUMP.NE, new Tree.TEMP(t1), new Tree.TEMP(t2), l1, l2));
 	}
      
     public Exp visit(NotExpr ast){
@@ -255,13 +258,12 @@ public class Translate implements Visitor {
 		return new Ex(new Tree.BINOP(Tree.BINOP.OR, new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t1), e1), new Tree.TEMP(t1)), new Tree.ESEQ(new Tree.MOVE(new Tree.TEMP(t2), e2), new Tree.TEMP(t2))));
     }
     
-    public LinkedList<Frag> visit(Program ast){
-		LinkedList<Frag> out = new LinkedList<Frag>();
+    public LinkedList<Exp> visit(Program ast){
+		LinkedList<Exp> out = new LinkedList<Exp>();
 
 		for(ClassDecl c : ast.classes){
-			for(Frag f : c.accept(this)){
-				out.add(f);
-			}
+			Exp f = c.accept(this);
+			out.add(f);
 		}
 
 		return out;
@@ -330,14 +332,14 @@ public class Translate implements Visitor {
 			table.put(v.name, temp);
 		}
 
-		Tree.Stm ret = null;
+		Tree.SEQ ret = null;
 
 		for(Stmt s : ast.stmts) {
-			ret = (new Nx(new Tree.SEQ(ret, s.accept(this).unNx()))).unNx();;
+			ret = (new Tree.SEQ(ret, s.accept(this).unNx()));
 		}
 		
 		//return new ProcFrag(ret.unNx(), m);
-		return ret.unEx();
+		return new Nx(ret);
 	}
      
     public Exp visit(WhileStmt ast) {
