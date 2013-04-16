@@ -1,5 +1,9 @@
 package Absyn;
 
+import java.util.LinkedList;
+
+import Translate.Exp;
+
 import visitor.TypeVisitor;
 import visitor.Visitable;
 import visitor.Visitor;
@@ -49,7 +53,7 @@ public class ClassDecl extends Absyn implements Visitable {
 		v.visit(this);
 	}
 
-	public Translate.Exp accept(Translate.Translate t){
+	public Exp accept(Translate.Visitor t){
 		return t.visit(this);
 	}
 }

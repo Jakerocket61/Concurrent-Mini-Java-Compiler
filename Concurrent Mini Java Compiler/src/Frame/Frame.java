@@ -3,6 +3,7 @@ package Frame;
 import java.util.LinkedList;
 import java.util.List;
 
+import Temp.Label;
 import Tree.Stm;
 
 public abstract class Frame {
@@ -24,5 +25,10 @@ public abstract class Frame {
 	}
 	
 	abstract public Tree.Stm procEntryExit1(Tree.Stm body);
+
+	public static Label badPtr() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

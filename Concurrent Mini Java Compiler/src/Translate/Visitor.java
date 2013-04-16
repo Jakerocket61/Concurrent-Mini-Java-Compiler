@@ -14,7 +14,7 @@ public interface Visitor {
      Exp visit(BlockStmt ast); 
      Exp visit(BooleanType ast); 
      Exp visit(CallExpr ast); 
-     LinkedList<Frag> visit(ClassDecl ast); 
+     Exp visit(ClassDecl ast); 
      Exp visit(DivExpr ast); 
      Exp visit(Expr ast);
      Exp visit(EqualExpr ast); 
@@ -28,7 +28,7 @@ public interface Visitor {
      Exp visit(IntegerLiteral ast); 
      Exp visit(IntegerType ast); 
      Exp visit(LesserExpr ast); 
-     Frag visit(MethodDecl ast); 
+     Exp visit(MethodDecl ast); 
      Exp visit(MulExpr ast); 
      Exp visit(NegExpr ast); 
      Exp visit(NewArrayExpr ast); 

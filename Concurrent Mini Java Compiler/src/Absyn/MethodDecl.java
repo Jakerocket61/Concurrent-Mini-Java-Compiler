@@ -2,6 +2,8 @@ package Absyn;
 
 import java.util.LinkedList;
 
+import Translate.Frag;
+
 import visitor.TypeVisitor;
 import visitor.Visitable;
 import visitor.Visitor;

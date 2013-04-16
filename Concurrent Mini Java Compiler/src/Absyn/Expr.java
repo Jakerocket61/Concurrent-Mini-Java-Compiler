@@ -1,5 +1,6 @@
 package Absyn;
 
+import Tree.Exp;
 import visitor.TypeVisitor;
 import visitor.Visitable;
 import visitor.Visitor;

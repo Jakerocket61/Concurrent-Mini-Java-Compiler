@@ -3,6 +3,8 @@ package Absyn;
 import java.util.AbstractList;
 import java.util.LinkedList;
 
+import Translate.Frag;
+
 import visitor.TypeVisitor;
 import visitor.Visitable;
 import visitor.Visitor;
@@ -26,7 +28,7 @@ public class Program implements Visitable {
 	}
 
 	
-	public Translate.Exp accept(Translate.Translate t){
+	public LinkedList<Frag> accept(Translate.Translate t){
 		return t.visit(this);
 	}
 }
