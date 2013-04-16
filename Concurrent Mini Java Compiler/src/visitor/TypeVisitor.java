@@ -311,7 +311,7 @@ public class TypeVisitor implements T_Visitor {
 		return new Types.INT();
 	}
 
-	public Types.INT visit(IntegerType ast) {
+	public Types.Type visit(IntegerType ast) {
 		return new Types.INT();
 	}
 
@@ -492,7 +492,13 @@ public class TypeVisitor implements T_Visitor {
 			}
 
 			for (VarDecl varDecl : classDecl.fields) {
-				varDecls.put(null, varDecl.name);
+                //Types.Type tmp = visit(varDecl.type);
+                //varDecl.checktype = visit(varDecl.type);
+				
+                varDecls.put(null, varDecl.name);
+                /*varDecl.checktype = varDecl.type.accept(this);
+                System.err.println("type: "+varDecl.checktype);
+                varDecls.put(varDecl.type.accept(this), varDecl.name);*/
 			}
 
 			/*
@@ -538,6 +544,10 @@ public class TypeVisitor implements T_Visitor {
 			}
 
 			for (int i = 0; i < classDecl.fields.size(); i++) {
+                //classDecl.fields.get(i).checktype = visit(classDecl.fields.get(i).type);
+
+                //System.err.println("cl: "+classDecl.fields.get(i).type);
+
 				varDecls.put(classDecl.fields.get(i).accept(this),
 						classDecl.fields.get(i).name);
 			}
@@ -641,6 +651,8 @@ public class TypeVisitor implements T_Visitor {
 
 	public Types.Type visit(VarDecl ast) {
 		Types.Type t1 = ast.type.accept(this);
+        //System.err.println(t1);
+        //Types.Type t1 = visit(ast.type);
 		Types.Type t2;
 		if (ast.init != null)
 			t2 = ast.init.accept(this);

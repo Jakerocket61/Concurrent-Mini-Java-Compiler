@@ -165,12 +165,14 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		visit(ast.fields);
 		visit(ast.methods);
 
+        indent();
 		out.print("CLASS(" + ast.name);
 		indentCount++;
 		indent();
 		out.print(ast.parent);
 
 		// record of fields
+        indent();
 		out.print("RECORD(");
 		indentCount++;
 		visit(ast.fields);
@@ -560,7 +562,10 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 			ast.init.accept(this);
 		}
 		indentCount++;
-		ast.checktype.accept(this);
+        indent();
+		ast.type.accept(this);
+        //ast.checktype = new Types.INT();
+        //out.print(ast.checktype.toString());
 		indentCount--;
 		out.print(")");
 	}
