@@ -9,7 +9,7 @@ public class BINOP extends Exp implements Hospitable {
 	public Exp left, right;
 	public final static int AND = 0, ARSHIFT = 1, BITAND = 2, BITOR = 3,
 			XOR = 4, DIV = 5, LSHIFT = 6, MINUS = 7, MUL = 8, OR = 9,
-			PLUS = 10, RSHIFT = 11, ADD = 10;
+			PLUS = 10, RSHIFT = 11, ADD = 10, BITXOR = 4;
 
 	public BINOP(int b, Tree.Exp exp, Tree.Exp exp2) {
 		binop = b;

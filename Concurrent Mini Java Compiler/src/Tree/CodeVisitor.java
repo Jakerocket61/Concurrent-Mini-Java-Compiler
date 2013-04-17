@@ -6,7 +6,7 @@ public interface CodeVisitor {
 	public void visit(JUMP n);
 	public void visit(CJUMP n);
 	public void visit(MOVE n);
-	public void visit(EXP n);
+	public void visit(Exp n);
 	
 	public Temp.Temp visit(BINOP n);
 	public Temp.Temp visit(MEM n);

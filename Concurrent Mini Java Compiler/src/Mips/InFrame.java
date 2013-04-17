@@ -5,6 +5,10 @@ public class InFrame extends Frame.Access {
 	public InFrame(Temp.Temp t){
 		this.t = t;
 	}
+	
+	public InFrame(int i){
+		this.t = new Temp.Temp(i);
+	}
 
 	public Tree.Exp exp(Tree.Exp framePtr){
 		return null;
