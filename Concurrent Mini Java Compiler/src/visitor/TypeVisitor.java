@@ -660,6 +660,31 @@ public class TypeVisitor implements T_Visitor {
 			t2 = new Types.NIL();
 		}
 
+        // Types.Type
+        //      Direct Known Subclasses:
+        //          ARRAY, BOOLEAN, CLASS, FIELD, FUNCTION, INT, NIL, OBJECT, RECORD, STRING, VOID
+        if (ast.type instanceof IntegerType)
+        {
+            ast.checktype = new Types.INT();
+        }
+        else if (ast.type instanceof BooleanType)
+        {
+            ast.checktype = new Types.BOOLEAN();
+        }
+        else if (ast.type instanceof ArrayType)
+        {
+            ast.checktype = new Types.ARRAY(((ArrayType)ast.type).checktype);
+        }
+        else if (ast.type instanceof IdentifierType)
+        {
+            ast.checktype = new Types.OBJECT(new Types.CLASS(((IdentifierType)ast.type).id));
+        }
+        else if (ast.type instanceof Type)
+        {
+            //ast.checktype = new Types.Type();
+            ast.checktype = new Types.NIL();
+        }
+
 		if (t2.coerceTo(t1) || t2.coerceTo(new Types.NIL())) {
 			scopeTab.put(ast.name, t1);
 			return t1;
