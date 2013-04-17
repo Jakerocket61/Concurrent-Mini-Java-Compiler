@@ -1,8 +1,10 @@
 package Frame;
 
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 
+import Assem.Instr;
 import Temp.Label;
 import Tree.Stm;
 
@@ -27,8 +29,23 @@ public abstract class Frame {
 	abstract public Tree.Stm procEntryExit1(Tree.Stm body);
 
 	public static Label badPtr() {
-		// TODO Auto-generated method stub
+		
 		return null;
+	}
+	
+	public static Label badSub() {
+		
+		return null;
+	}
+
+	public List<Instr> codeGen(List<Stm> traced) {
+		
+		return null;
+	}
+
+	public void printFrame(PrintWriter writer) {
+		
+		
 	}
 
 }

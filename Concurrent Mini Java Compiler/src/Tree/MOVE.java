@@ -33,4 +33,8 @@ public class MOVE extends Stm implements Hospitable {
 		else 
 			return new MOVE(dst, kids.getFirst());
 	}
+	
+	public void accept(CodeVisitor v){
+		v.visit(this);
+	}
 }

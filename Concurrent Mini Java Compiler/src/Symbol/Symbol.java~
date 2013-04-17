@@ -7,7 +7,7 @@ public class Symbol {
 		name = n;
 	}
 	
-	public static java.util.Dictionary dict = new java.util.Hashtable();
+	public static java.util.Dictionary dict = new java.util.Hashtable<String,Temp.Label>();
 	
 	public String toString() {
 		return name;
@@ -18,7 +18,7 @@ public class Symbol {
 		Symbol s = (Symbol)dict.get(u);
 		if (s == null) {
 			s = new Symbol(u);
-			dict.put(u,s);
+			dict.put(u,new Temp.Label(s.name));
 		}
 	
 		return s;

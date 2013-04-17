@@ -12,9 +12,9 @@ public class MipsFrame extends Frame.Frame {
 	public LinkedList<Frame.Access> actuals;
 	public int argc;
 	
-	private final Temp.Temp ZERO = new Temp.Temp();
+	public final Temp.Temp ZERO = new Temp.Temp();
 
-	private static Temp.Temp registers[] = {new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+	public static Temp.Temp registers[] = {new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
 											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
 											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
 											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
@@ -35,19 +35,15 @@ public class MipsFrame extends Frame.Frame {
 			case 1:
 				Temp.Temp[] arguments1 = { new Temp.Temp(4) };
 				return arguments1;
-				break;
 			case 2:
 				Temp.Temp[] arguments2 = { new Temp.Temp(4), new Temp.Temp(5) };
 				return arguments2;
-				break;
 			case 3:		
 				Temp.Temp[] arguments3 = { new Temp.Temp(4), new Temp.Temp(5), new Temp.Temp(6) };
 				return arguments3;
-				break;
 			case 4:
 				Temp.Temp[] arguments4 = { new Temp.Temp(4), new Temp.Temp(5), new Temp.Temp(6), new Temp.Temp(7) };
 				return arguments4;
-				break;
 			default:
 				break;
 		}
@@ -115,8 +111,19 @@ public class MipsFrame extends Frame.Frame {
 
 	@Override
 	public Frame.Frame newFrame(Label name, LinkedList<Boolean> formals) {
-		
-		return null;
+		MipsFrame m = new MipsFrame();
+		m.name = name;
+		m.formals = new LinkedList<Frame.Access>();
+		m.actuals = new LinkedList<Frame.Access>();
+
+		m.argc = 0;
+		for(boolean b : formals) {
+
+			m.allocFormal(b);
+			
+		}
+
+		return m;
 	}
 
 	public Frame.Frame newFrame(Label name) {

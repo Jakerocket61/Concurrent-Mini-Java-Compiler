@@ -185,7 +185,7 @@ import java.util.List;
     jj_consume_token(LPAREN);
     name = jj_consume_token(ID);
     jj_consume_token(COLON);
-                          frame = (Mips.MipsFrame)(masterFrame.newFrame(Symbol.Symbol.dict.get(name.image)));
+                          frame = (Mips.MipsFrame)(masterFrame.newFrame(new Temp.Label(name.image)));
     formals = FormalList();
                              frame.formals = formals;
     actuals = FormalList();

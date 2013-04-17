@@ -83,7 +83,7 @@ public class Main
 
 		try
 	    {
-			frags = new Assem.ReadFrags(reader).Program();
+			frags = new ReadFrags(reader).Program();
 	    }
 		catch (ParseException p)
 	    {
@@ -92,90 +92,89 @@ public class Main
 	    }
 
 		PrintWriter writer = new PrintWriter(System.out);
-		visitor.PrintVisitor pv = new visitor.PrintVisitor(writer);
-		pv.visit(frags);
-//		for (Translate.Frag frag : frags)
-//		{
-//			if (frag instanceof Translate.DataFrag) 
-//			{
-//				writer.println("DataFrag(");
-//				writer.println(frag);
-//				writer.println(")");
-//			} 
-//			else 
-//			{
-//				Translate.ProcFrag p = (Translate.ProcFrag)frag;
-//				List<Tree.Stm> traced = new LinkedList<Tree.Stm>();
-//				if (p.body != null) 
-//				{
-//					LinkedList<Tree.Stm> stms = Canon.Canon.linearize(p.body);
-//					if (canonOutput)
-//					{
-//						writer.println("/* **** CANONICAL TREES **** */");
-//						for (Tree.Stm s : stms)
-//						{
-//							new Tree.Print(writer, s);
-//							writer.println();
-//						}
-//						writer.flush();
-//					}
-//					Canon.BasicBlocks blocks = new Canon.BasicBlocks(stms);
-//					if (blockOutput)
-//					{
-//						writer.println("/* **** BASIC BLOCKS **** */");
-//						for (LinkedList<Tree.Stm> slist : blocks.blocks)
-//						{
-//							for (Tree.Stm s : slist)
-//							{
-//								new Tree.Print(writer, s);
-//								writer.println();
-//							}
-//						}
-//						new Tree.Print(writer, new Tree.LABEL(blocks.done));
-//						writer.flush();
-//					}
-//					new Canon.TraceSchedule(blocks, traced);
-//					if (traceOutput)
-//					{
-//						writer.println("/* **** TRACE SCHEDULED **** */");
-//						for (Tree.Stm s : traced)
-//						{
-//							new Tree.Print(writer, s);
-//							writer.println();
-//						}
-//						writer.flush();						
-//					}
-//				}
-//				p.frame.procEntryExit1(traced);
-//				if (prologOutput)
-//				{
-//					writer.println("/* **** PROLOGUE / EPILOGUE **** */");
-//					for (Tree.Stm s : traced)
-//					{
-//						new Tree.Print(writer, s);
-//						writer.println();
-//					}
-//					writer.flush();
-//				}
-//
-//				List<Assem.Instr> code = p.frame.codeGen(traced);
-//				if (assemOutput)
-//				{
-//					for (Assem.Instr i : code)
-//					{
-//						writer.println(i);
-//					}
-//				}
-//
-//				writer.println("ProcFrag(");
-//				p.frame.printFrame(writer);
-//				for (Assem.Instr i : code)
-//				{
-//					i.output(writer);
-//				}
-//				writer.println(")");
-//			}
-//		}  
+
+		for (Translate.Frag frag : frags)
+		{
+			if (frag instanceof Translate.DataFrag) 
+			{
+				writer.println("DataFrag(");
+				writer.println(frag);
+				writer.println(")");
+			} 
+			else 
+			{
+				Translate.ProcFrag p = (Translate.ProcFrag)frag;
+				List<Tree.Stm> traced = new LinkedList<Tree.Stm>();
+				if (p.body != null) 
+				{
+					LinkedList<Tree.Stm> stms = Canon.Canon.linearize(p.body);
+					if (canonOutput)
+					{
+						writer.println("/* **** CANONICAL TREES **** */");
+						for (Tree.Stm s : stms)
+						{
+							new Tree.Print(writer, s);
+							writer.println();
+						}
+						writer.flush();
+					}
+					Canon.BasicBlocks blocks = new Canon.BasicBlocks(stms);
+					if (blockOutput)
+					{
+						writer.println("/* **** BASIC BLOCKS **** */");
+						for (LinkedList<Tree.Stm> slist : blocks.blocks)
+						{
+							for (Tree.Stm s : slist)
+							{
+								new Tree.Print(writer, s);
+								writer.println();
+							}
+						}
+						new Tree.Print(writer, new Tree.LABEL(blocks.done));
+						writer.flush();
+					}
+					new Canon.TraceSchedule(blocks, traced);
+					if (traceOutput)
+					{
+						writer.println("/* **** TRACE SCHEDULED **** */");
+						for (Tree.Stm s : traced)
+						{
+							new Tree.Print(writer, s);
+							writer.println();
+						}
+						writer.flush();						
+					}
+				}
+				p.frame.procEntryExit1(traced);
+				if (prologOutput)
+				{
+					writer.println("/* **** PROLOGUE / EPILOGUE **** */");
+					for (Tree.Stm s : traced)
+					{
+						new Tree.Print(writer, s);
+						writer.println();
+					}
+					writer.flush();
+				}
+
+				List<Assem.Instr> code = p.frame.codeGen(traced);
+				if (assemOutput)
+				{
+					for (Assem.Instr i : code)
+					{
+						writer.println(i);
+					}
+				}
+
+				writer.println("ProcFrag(");
+				p.frame.printFrame(writer);
+				for (Assem.Instr i : code)
+				{
+					i.output(writer);
+				}
+				writer.println(")");
+			}
+		}  
 		writer.flush();
 	}
 }	

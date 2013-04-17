@@ -12,9 +12,9 @@ public class MipsFrame extends Frame.Frame {
 	public LinkedList<Frame.Access> actuals;
 	public int argc;
 	
-	private final Temp.Temp ZERO = new Temp.Temp();
+	public final Temp.Temp ZERO = new Temp.Temp();
 
-	private static Temp.Temp registers[] = {new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
+	public static Temp.Temp registers[] = {new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
 											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
 											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
 											new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),new Temp.Temp(),
@@ -51,6 +51,8 @@ public class MipsFrame extends Frame.Frame {
 		return null;
 	}
 	
+	public static Temp.Temp zeroReg = new Temp.Temp(0);
+	
 	public MipsFrame() {
 		this.name = null;
 		this.formals = new LinkedList<Frame.Access>();
@@ -71,7 +73,10 @@ public class MipsFrame extends Frame.Frame {
 			
 		}
 	}
-
+	
+	private final static Temp.Temp badPtr = new Temp.Temp();
+	private final static Temp.Temp badSub = new Temp.Temp();
+		
 	public static void initRegs(){
 		for(int i = 0; i < 32; i++){
 			new Temp.Temp();
@@ -111,18 +116,46 @@ public class MipsFrame extends Frame.Frame {
 
 	@Override
 	public Frame.Frame newFrame(Label name, LinkedList<Boolean> formals) {
-		
-		return null;
+		MipsFrame m = new MipsFrame();
+		m.name = name;
+		m.formals = new LinkedList<Frame.Access>();
+		m.actuals = new LinkedList<Frame.Access>();
+
+		m.argc = 0;
+		for(boolean b : formals) {
+
+			m.allocFormal(b);
+			
+		}
+
+		return m;
 	}
 
+	
+
 	public Frame.Frame newFrame(Label name) {
+		MipsFrame m = new MipsFrame();
 		
-		return null;
+		m.name = name;
+		m.formals = new LinkedList<Frame.Access>();
+		m.actuals = new LinkedList<Frame.Access>();
+
+		m.argc = 0;
+		
+		return m;
 	}
 
 	@Override
 	public Stm procEntryExit1(Stm body) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+public static Label badPtr() {
+		return new Label("_BADPTR");
+	}
+	
+	public static Label badSub() {
+		return new Label("_BADSUB");
 	}
 }

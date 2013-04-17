@@ -11,4 +11,8 @@ public class TEMP extends Exp implements Hospitable {
 	public void accept(IntVisitor v, int d) {
 		v.visit(this, d);
 	}
+	
+	public Temp.Temp accept(CodeVisitor v){
+		return v.visit(this);
+	}
 }

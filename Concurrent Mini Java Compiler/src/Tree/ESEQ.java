@@ -19,4 +19,8 @@ public class ESEQ extends Exp implements Hospitable {
 	public LinkedList<Exp> kids() {
 		throw new Error("kids() not applicable to ESEQ");
 	}
+	
+	public Temp.Temp accept(CodeVisitor v){
+		return v.visit(this);
+	}
 }

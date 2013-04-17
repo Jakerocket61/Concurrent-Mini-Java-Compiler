@@ -1,7 +1,7 @@
 package Symbol;
 
 public class Symbol {
-	private String name;
+	public String name;
 
 	private Symbol (String n) {
 		name = n;

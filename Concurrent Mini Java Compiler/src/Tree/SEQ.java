@@ -23,4 +23,8 @@ public class SEQ extends Stm implements Hospitable {
 	public Stm build(LinkedList<Exp> kids) {
 		throw new Error("build() not applicable to SEQ");
 	}
+	
+	public void accept(CodeVisitor v){
+		v.visit(this);
+	}
 }

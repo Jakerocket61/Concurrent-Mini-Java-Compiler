@@ -22,4 +22,8 @@ public class EXP extends Stm implements Hospitable {
 	public Stm build(LinkedList<Exp> exps) {
 		return null;
 	}
+	
+	public void accept(CodeVisitor v){
+		v.visit(this);
+	}
 }

@@ -17,4 +17,8 @@ public class CONST extends Exp implements Hospitable {
 	public LinkedList<Exp> kids() {
 		return null;
 	}
+	
+	public Temp.Temp accept(CodeVisitor v){
+		return v.visit(this);
+	}
 }

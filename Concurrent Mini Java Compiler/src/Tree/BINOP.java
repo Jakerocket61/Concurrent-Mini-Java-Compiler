@@ -21,6 +21,10 @@ public class BINOP extends Exp implements Hospitable {
 		v.visit(this, d);
 	}
 	
+	public Temp.Temp accept(CodeVisitor v){
+		return v.visit(this);
+	}
+	
 	public LinkedList<Exp> kids() {	
 		LinkedList<Exp> kids = new LinkedList<Exp>();
 		kids.add(left);

@@ -64,7 +64,7 @@ TRANSLATE  		= 	Translate/Cx.java 		Translate/DataFrag.java 	Translate/Ex.java \
 ASSEM			= 	Assem/Instr.java			Assem/LABEL.java		Assem/MOVE.java	\
 					Assem/OPER.java				Canon/Canon.java 			Canon/Canon.java \
 					Canon/TraceSchedule.java 		Mips/InFrame.java 		Mips/InReg.java \
-					Mips/MipsFrame.java
+					Mips/MipsFrame.java			Mips/Codegen.java
 
 TREE			=	Tree/BINOP.java				Tree/CALL.java			Tree/CJUMP.java \
 					Tree/CONST.java			Tree/ESEQ.java			Tree/Exp.java \

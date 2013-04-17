@@ -30,4 +30,8 @@ public class CALL extends Exp implements Hospitable {
 	public Exp build(LinkedList<Exp> kids) {
 		return new CALL(kids.removeFirst(), kids);
 	}
+	
+	public Temp.Temp accept(CodeVisitor v){
+		return v.visit(this);
+	}
 }

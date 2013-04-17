@@ -1,22 +1,14 @@
 package Tree;
 
 
-import java.util.LinkedList;
-
 import Temp.DefaultMap;
-import Temp.TempMap;
 
 public class Print implements IntVisitor {
 
-	java.io.PrintStream out;
+	java.io.PrintWriter out;
 	Stm st = null;
 
-	public Print(java.io.PrintStream o) {
-		out = o;
-		//st = new Stm();
-	}
-
-	public Print(java.io.PrintStream writer, Stm s) {
+	public Print(java.io.PrintWriter writer, Stm s) {
 		out = writer;
 		st = s;
 	}

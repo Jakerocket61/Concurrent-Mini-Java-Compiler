@@ -19,4 +19,8 @@ public class Exp implements Hospitable {
 	public Exp build(LinkedList<Exp> exps) {
 		return new Tree.Exp();
 	}
+	
+	public Temp.Temp accept(CodeVisitor v){
+		return v.visit(this);
+	}
 }
