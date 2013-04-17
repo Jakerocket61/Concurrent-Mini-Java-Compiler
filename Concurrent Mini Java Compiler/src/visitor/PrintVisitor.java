@@ -562,8 +562,9 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 			ast.init.accept(this);
 		}
 		indentCount++;
-        indent();
-		ast.type.accept(this);
+        //indent();
+        ast.checktype.accept(this);
+		//ast.type.accept(this);
         //ast.checktype = new Types.INT();
         //out.print(ast.checktype.toString());
 		indentCount--;
