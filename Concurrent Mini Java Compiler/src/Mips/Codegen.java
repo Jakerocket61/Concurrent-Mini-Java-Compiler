@@ -67,7 +67,7 @@ public class Codegen implements CodeVisitor {
 		// OPER("	jal	_print" defs(t31 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 t15
 		// t24 t25 t2 t3 ) uses(t4 ))
 		// TODO fix this!!
-		emit(OPER("jal", visit(frame.formals), visit(frame.actuals)));
+		emit(OPER("jal", MipsFrame.registers, n.actuals));
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class Codegen implements CodeVisitor {
 				break;
 		}
 		
-		emit(OPER(operation, ));
+		emit(OPER(operation + "`s0,	`s1,	`j0", ));
 		
 
 	}

@@ -226,8 +226,7 @@ Frame.Frame Frame() :
 }
 {
 	<MIPSFRAME> <LPAREN>
-    name = <ID> <COLON> { frame = (Mips.MipsFrame)(masterFrame.newFrame(
-										Symbol.Symbol.get(name.image))); }
+    name = <ID> <COLON> { frame = (Mips.MipsFrame)(masterFrame.newFrame(Symbol.Symbol.dict.get(name.image))); }
     formals = FormalList() { frame.formals = formals; }
     actuals = FormalList() { frame.actuals = actuals; }
     [ <BADPTR> <LPAREN> name = <ID> <RPAREN>

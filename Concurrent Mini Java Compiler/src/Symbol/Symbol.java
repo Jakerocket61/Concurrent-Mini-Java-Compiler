@@ -7,7 +7,7 @@ public class Symbol {
 		name = n;
 	}
 	
-	private static java.util.Dictionary dict = new java.util.Hashtable();
+	public static java.util.Dictionary dict = new java.util.Hashtable();
 	
 	public String toString() {
 		return name;

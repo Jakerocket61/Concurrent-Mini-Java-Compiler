@@ -77,9 +77,9 @@ TREE			=	Tree/BINOP.java				Tree/CALL.java			Tree/CJUMP.java \
 TEMP			=	Temp/CombineMap.java			Temp/DefaultMap.java		Temp/Label.java \
 				Temp/LabelList.java			Temp/Temp.java			Temp/TempList.java \
 				Temp/TempMap.java		
+SYMBOL			=	Symbol/Table.java		Symbol/Symbol.java
 
-
-SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) $(TREE) $(TEMP) $(TRANSLATE) $(ASSEM) \
+SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) $(TREE) $(TEMP) $(TRANSLATE)  $(SYMBOL) $(ASSEM) \
 					Semant/ReadAbsyn.java		Semant/Main.java \
 					Parse/ReadTypes.java		Translate/Main.java \
 					Parse/Parse.java 			Parse/Main.java   \
