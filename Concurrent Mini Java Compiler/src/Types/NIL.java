@@ -10,10 +10,12 @@ public class NIL extends Type // implements Visitable
 	}
 
 	public boolean coerceTo(Type t) {
-		return (t instanceof Types.NIL);
+		//return (t instanceof Types.NIL);
+		return true;
 	}
 
 	public String toString() {
 		return "nil";
 	}
 }
+

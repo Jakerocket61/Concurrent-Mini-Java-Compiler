@@ -10,7 +10,7 @@ public class INT extends Type // implements Visitable
 	}
 
 	public boolean coerceTo(Type t) {
-		return (t instanceof Types.INT || t instanceof Types.NIL);
+		return (t instanceof Types.INT);
 	}
 
 	public String toString() {

@@ -8,13 +8,10 @@ public class STRING extends Type // implements Visitable
 	}
 
 	public boolean coerceTo(Type t) {
-		if(t instanceof Types.STRING || t instanceof Types.NIL)
-			return true;
-		else
-			return false;
+		return (t instanceof Types.STRING);
 	}
 
-	/*public boolean coerceTo(Type t) {
+	public boolean coerceTo(Type t) {
 		// whether (t) can be (this)
 		if (t instanceof Types.STRING) {
 			CLASS current = this.myClass;
@@ -32,7 +29,7 @@ public class STRING extends Type // implements Visitable
 		}
 
 		return false;
-	}*/
+	}
 
 	public String toString() {
 		return "OBJECT:String";

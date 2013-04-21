@@ -1,0 +1,417 @@
+Program(
+ AbstractList(
+  ClassDecl(NQueens null
+   AbstractList()
+   AbstractList(
+    MethodDecl(public_static_void main
+     AbstractList(
+      Formal(ArrayType(IdentifierType(String)) a))
+     AbstractList(
+      VarDecl(IntegerType n null 
+       INT)
+      VarDecl(IntegerType x null 
+       INT)
+      VarDecl(IdentifierType(Queens2) q null 
+       OBJECT(Queens2)))
+     AbstractList(
+      XinuCallStmt(print
+       AbstractList(
+        StringLiteral("Number of queens? ")))
+      AssignStmt(
+       IdentifierExpr(n)
+       XinuCallExpr(readint
+        AbstractList()))
+      AssignStmt(
+       IdentifierExpr(q)
+       CallExpr(
+        NewObjectExpr(IdentifierType(Queens2))
+        init
+        AbstractList(
+         IdentifierExpr(n))
+        0))
+      AssignStmt(
+       IdentifierExpr(x)
+       CallExpr(
+        IdentifierExpr(q)
+        run
+        AbstractList(
+         IntegerLiteral(0))
+        1)))
+     IntegerLiteral(0)
+     FUNCTION(main
+      OBJECT(NQueens)
+      RECORD(
+       FIELD(0 a
+        ARRAY(
+         OBJECT(String))))
+      VOID)))
+   CLASS(NQueens
+    null
+    RECORD(
+     FIELD(0 main
+      FUNCTION(main
+       OBJECT(NQueens)
+       RECORD(
+        FIELD(0 a
+         ARRAY(
+          OBJECT(String))))
+       VOID)))
+    RECORD()
+    OBJECT(NQueens
+     RECORD(
+      FIELD(0 main
+       FUNCTION(main
+        OBJECT(NQueens)
+        RECORD(
+         FIELD(0 a
+          ARRAY(
+           OBJECT(String))))
+        VOID)))
+     RECORD())))
+  ClassDecl(Queens2 null
+   AbstractList(
+    VarDecl(IntegerType N null 
+     INT)
+    VarDecl(ArrayType(IntegerType) row null 
+     ARRAY(
+      INT))
+    VarDecl(ArrayType(IntegerType) col null 
+     ARRAY(
+      INT))
+    VarDecl(ArrayType(IntegerType) diag1 null 
+     ARRAY(
+      INT))
+    VarDecl(ArrayType(IntegerType) diag2 null 
+     ARRAY(
+      INT)))
+   AbstractList(
+    MethodDecl(IdentifierType(Queens2) init
+     AbstractList(
+      Formal(IntegerType n))
+     AbstractList()
+     AbstractList(
+      AssignStmt(
+       IdentifierExpr(N)
+       IdentifierExpr(n))
+      AssignStmt(
+       IdentifierExpr(row)
+       NewArrayExpr(IntegerType
+        AbstractList(
+         IdentifierExpr(n))))
+      AssignStmt(
+       IdentifierExpr(col)
+       NewArrayExpr(IntegerType
+        AbstractList(
+         IdentifierExpr(n))))
+      AssignStmt(
+       IdentifierExpr(diag1)
+       NewArrayExpr(IntegerType
+        AbstractList(
+         SubExpr(
+          AddExpr(
+           IdentifierExpr(n)
+           IdentifierExpr(n))
+          IntegerLiteral(1)))))
+      AssignStmt(
+       IdentifierExpr(diag2)
+       NewArrayExpr(IntegerType
+        AbstractList(
+         SubExpr(
+          AddExpr(
+           IdentifierExpr(n)
+           IdentifierExpr(n))
+          IntegerLiteral(1))))))
+     ThisExpr
+     FUNCTION(init
+      OBJECT(Queens2)
+      RECORD(
+       FIELD(0 n
+        INT))
+      OBJECT(Queens2)))
+    MethodDecl(IntegerType run
+     AbstractList(
+      Formal(IntegerType c))
+     AbstractList(
+      VarDecl(IntegerType x null 
+       INT)
+      VarDecl(IntegerType r
+       IntegerLiteral(0) 
+       INT))
+     AbstractList(
+      IfStmt(
+       EqualExpr(
+        IdentifierExpr(c)
+        FieldExpr(
+         ThisExpr
+         N
+         0))
+       AssignStmt(
+        IdentifierExpr(x)
+        CallExpr(
+         ThisExpr
+         printboard
+         AbstractList()
+         2))
+       BlockStmt(
+        AbstractList(
+         AssignStmt(
+          IdentifierExpr(r)
+          IntegerLiteral(0))
+         WhileStmt(
+          LesserExpr(
+           IdentifierExpr(r)
+           FieldExpr(
+            ThisExpr
+            N
+            0))
+          BlockStmt(
+           AbstractList(
+            IfStmt(
+             AndExpr(
+              AndExpr(
+               EqualExpr(
+                ArrayExpr(
+                 FieldExpr(
+                  ThisExpr
+                  row
+                  1)
+                 IdentifierExpr(r))
+                IntegerLiteral(0))
+               EqualExpr(
+                ArrayExpr(
+                 FieldExpr(
+                  ThisExpr
+                  diag1
+                  3)
+                 AddExpr(
+                  IdentifierExpr(r)
+                  IdentifierExpr(c)))
+                IntegerLiteral(0)))
+              EqualExpr(
+               ArrayExpr(
+                FieldExpr(
+                 ThisExpr
+                 diag2
+                 4)
+                SubExpr(
+                 SubExpr(
+                  AddExpr(
+                   IdentifierExpr(r)
+                   IdentifierExpr(N))
+                  IntegerLiteral(1))
+                 IdentifierExpr(c)))
+               IntegerLiteral(0)))
+             BlockStmt(
+              AbstractList(
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(row)
+                 IdentifierExpr(r))
+                IntegerLiteral(1))
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(diag1)
+                 AddExpr(
+                  IdentifierExpr(r)
+                  IdentifierExpr(c)))
+                IntegerLiteral(1))
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(diag2)
+                 SubExpr(
+                  SubExpr(
+                   AddExpr(
+                    IdentifierExpr(r)
+                    IdentifierExpr(N))
+                   IntegerLiteral(1))
+                  IdentifierExpr(c)))
+                IntegerLiteral(1))
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(col)
+                 IdentifierExpr(c))
+                IdentifierExpr(r))
+               AssignStmt(
+                IdentifierExpr(x)
+                CallExpr(
+                 ThisExpr
+                 run
+                 AbstractList(
+                  AddExpr(
+                   IdentifierExpr(c)
+                   IntegerLiteral(1)))
+                 1))
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(row)
+                 IdentifierExpr(r))
+                IntegerLiteral(0))
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(diag1)
+                 AddExpr(
+                  IdentifierExpr(r)
+                  IdentifierExpr(c)))
+                IntegerLiteral(0))
+               AssignStmt(
+                ArrayExpr(
+                 IdentifierExpr(diag2)
+                 SubExpr(
+                  SubExpr(
+                   AddExpr(
+                    IdentifierExpr(r)
+                    IdentifierExpr(N))
+                   IntegerLiteral(1))
+                  IdentifierExpr(c)))
+                IntegerLiteral(0))))
+             null)
+            AssignStmt(
+             IdentifierExpr(r)
+             AddExpr(
+              IdentifierExpr(r)
+              IntegerLiteral(1))))))))))
+     IntegerLiteral(0)
+     FUNCTION(run
+      OBJECT(Queens2)
+      RECORD(
+       FIELD(0 c
+        INT))
+      INT))
+    MethodDecl(IntegerType printboard
+     AbstractList()
+     AbstractList(
+      VarDecl(IntegerType i
+       IntegerLiteral(0) 
+       INT)
+      VarDecl(IntegerType j
+       IntegerLiteral(0) 
+       INT))
+     AbstractList(
+      WhileStmt(
+       LesserExpr(
+        IdentifierExpr(i)
+        FieldExpr(
+         ThisExpr
+         N
+         0))
+       BlockStmt(
+        AbstractList(
+         AssignStmt(
+          IdentifierExpr(j)
+          IntegerLiteral(0))
+         WhileStmt(
+          LesserExpr(
+           IdentifierExpr(j)
+           FieldExpr(
+            ThisExpr
+            N
+            0))
+          BlockStmt(
+           AbstractList(
+            IfStmt(
+             EqualExpr(
+              ArrayExpr(
+               FieldExpr(
+                ThisExpr
+                col
+                2)
+               IdentifierExpr(i))
+              IdentifierExpr(j))
+             XinuCallStmt(print
+              AbstractList(
+               StringLiteral(" Q")))
+             XinuCallStmt(print
+              AbstractList(
+               StringLiteral(" ."))))
+            AssignStmt(
+             IdentifierExpr(j)
+             AddExpr(
+              IdentifierExpr(j)
+              IntegerLiteral(1))))))
+         XinuCallStmt(println
+          AbstractList())
+         AssignStmt(
+          IdentifierExpr(i)
+          AddExpr(
+           IdentifierExpr(i)
+           IntegerLiteral(1))))))
+      XinuCallStmt(println
+       AbstractList()))
+     IntegerLiteral(0)
+     FUNCTION(printboard
+      OBJECT(Queens2)
+      RECORD()
+      INT)))
+   CLASS(Queens2
+    null
+    RECORD(
+     FIELD(0 init
+      FUNCTION(init
+       OBJECT(Queens2)
+       RECORD(
+        FIELD(0 n
+         INT))
+       OBJECT(Queens2)))
+     FIELD(1 run
+      FUNCTION(run
+       OBJECT(Queens2)
+       RECORD(
+        FIELD(0 c
+         INT))
+       INT))
+     FIELD(2 printboard
+      FUNCTION(printboard
+       OBJECT(Queens2)
+       RECORD()
+       INT)))
+    RECORD(
+     FIELD(0 N
+      INT)
+     FIELD(1 row
+      ARRAY(
+       INT))
+     FIELD(2 col
+      ARRAY(
+       INT))
+     FIELD(3 diag1
+      ARRAY(
+       INT))
+     FIELD(4 diag2
+      ARRAY(
+       INT)))
+    OBJECT(Queens2
+     RECORD(
+      FIELD(0 init
+       FUNCTION(init
+        OBJECT(Queens2)
+        RECORD(
+         FIELD(0 n
+          INT))
+        OBJECT(Queens2)))
+      FIELD(1 run
+       FUNCTION(run
+        OBJECT(Queens2)
+        RECORD(
+         FIELD(0 c
+          INT))
+        INT))
+      FIELD(2 printboard
+       FUNCTION(printboard
+        OBJECT(Queens2)
+        RECORD()
+        INT)))
+     RECORD(
+      FIELD(0 N
+       INT)
+      FIELD(1 row
+       ARRAY(
+        INT))
+      FIELD(2 col
+       ARRAY(
+        INT))
+      FIELD(3 diag1
+       ARRAY(
+        INT))
+      FIELD(4 diag2
+       ARRAY(
+        INT))))))))

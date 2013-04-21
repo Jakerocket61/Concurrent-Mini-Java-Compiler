@@ -1,5 +1,9 @@
 package Absyn;
 
+import java.util.LinkedList;
+
+import Translate.Exp;
+
 import visitor.TypeVisitor;
 import visitor.Visitable;
 import visitor.Visitor;
@@ -13,7 +17,7 @@ public class ClassDecl extends Absyn implements Visitable {
 	public String name;
 	public String parent;
 
-	public Types.Type checktype;
+	public Types.CLASS checktype;
 
 	public ClassDecl(java.util.LinkedList<VarDecl> fields,
 			java.util.LinkedList<MethodDecl> methods, String name, String parent) {
@@ -48,4 +52,9 @@ public class ClassDecl extends Absyn implements Visitable {
 	public void accept(Visitor v) {
 		v.visit(this);
 	}
+
+	public Exp accept(Translate.Visitor t){
+		return t.visit(this);
+	}
 }
+
