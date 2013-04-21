@@ -33,4 +33,3 @@ public class CLASS extends Type implements Visitable {
 		return "class";
 	}
 }
-

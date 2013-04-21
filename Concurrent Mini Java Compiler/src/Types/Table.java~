@@ -41,6 +41,7 @@ public class Table<T> {
 		 * name); System.exit(0); return out; } else{
 		 */
 
+		System.out.print(out);
 		return out;
 		// }
 	}

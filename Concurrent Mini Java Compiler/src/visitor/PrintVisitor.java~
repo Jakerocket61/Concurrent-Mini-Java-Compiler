@@ -165,8 +165,6 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		visit(ast.fields);
 		visit(ast.methods);
 
-		indent();
-
 		out.print("CLASS(" + ast.name);
 		indentCount++;
 		indent();

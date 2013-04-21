@@ -17,7 +17,7 @@ public class ClassDecl extends Absyn implements Visitable {
 	public String name;
 	public String parent;
 
-	public Types.Type checktype;
+	public Types.CLASS checktype;
 
 	public ClassDecl(java.util.LinkedList<VarDecl> fields,
 			java.util.LinkedList<MethodDecl> methods, String name, String parent) {
@@ -25,6 +25,7 @@ public class ClassDecl extends Absyn implements Visitable {
 		this.methods = methods;
 		this.name = name;
 		this.parent = parent;
+
 	}
 
 	public ClassDecl(String name, java.util.LinkedList<VarDecl> fields,

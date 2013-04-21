@@ -19,7 +19,7 @@ public class MethodDecl extends Absyn implements Visitable {
 	public LinkedList<Stmt> stmts;
 	public Expr returnVal;
 
-	public Types.FUNCTION checktype;
+	public Types.Type checktype;
 
 	public MethodDecl(String name, boolean synced,
 			java.util.LinkedList<VarDecl> locals,
