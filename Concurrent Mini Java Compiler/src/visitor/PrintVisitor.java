@@ -165,14 +165,12 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		visit(ast.fields);
 		visit(ast.methods);
 
-        indent();
 		out.print("CLASS(" + ast.name);
 		indentCount++;
 		indent();
 		out.print(ast.parent);
 
 		// record of fields
-        indent();
 		out.print("RECORD(");
 		indentCount++;
 		visit(ast.fields);
@@ -509,10 +507,7 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 
 			ast.methods.accept(this);
 			ast.fields.accept(this);
-			if (ast.methods.hash.size() > 0)
-				out.print("8=======D");
-			if (ast.fields.hash.size() > 0)
-				out.print("8=======D");
+
 			indentCount--;
 			out.print(")");
 		}
@@ -523,9 +518,6 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		out.print("RECORD(");
 
 		indentCount++;
-
-		if (ast.hash.size() > 0)
-			out.print("8=======D");
 
 		for (Types.FIELD fieldOfRecord : ast.fields)
 			fieldOfRecord.accept(this);
@@ -562,11 +554,7 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 			ast.init.accept(this);
 		}
 		indentCount++;
-        //indent();
-        ast.checktype.accept(this);
-		//ast.type.accept(this);
-        //ast.checktype = new Types.INT();
-        //out.print(ast.checktype.toString());
+		ast.checktype.accept(this);
 		indentCount--;
 		out.print(")");
 	}

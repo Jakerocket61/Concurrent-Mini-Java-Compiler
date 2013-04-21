@@ -9,8 +9,14 @@ import Absyn.*;
 public class Translate implements Visitor {
 	
 	public Types.Table<Temp.Temp> table;
+	private LinkedList<Frag> r;
+
+	public LinkedList<Frag> results(){
+		return r;
+	}
 
 	public Translate() {
+		r = new LinkedList<Frag>();
 		table = new Types.Table<Temp.Temp>();
 	}
 

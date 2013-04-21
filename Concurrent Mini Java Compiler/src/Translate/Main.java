@@ -41,17 +41,27 @@ public class Main {
 		parse.accept(translate);
 
 		PrintWriter writer = new PrintWriter(System.out);
-		visitor.PrintVisitor pv = new visitor.PrintVisitor(writer);
-		pv.visit(parse);
+		/*		visitor.PrintVisitor pv = new visitor.PrintVisitor(writer);
+		pv.visit(parse);*/
 
-		/*
-		 * for (Iterator frags = translate.results().iterator();
-		 * frags.hasNext(); ) { Frag f = (Frag)frags.next(); if (f instanceof
-		 * DataFrag) { writer.println("DataFrag("); writer.println(f);
-		 * writer.println(")"); } else { writer.println("ProcFrag("); ProcFrag p
-		 * = (ProcFrag)f; p.frame.printFrame(writer); if (p.body != null) { new
-		 * Tree.Print(writer, p.body); writer.println(); } writer.println(")");
-		 * } } writer.flush();
-		 */
+		for (Iterator frags = translate.results().iterator(); frags.hasNext();) {
+			Frag f = (Frag) frags.next();
+			if (f instanceof DataFrag) {
+				writer.println("DataFrag(");
+				writer.println(f);
+				writer.println(")");
+			} else {
+				writer.println("ProcFrag(");
+				ProcFrag p = (ProcFrag) f;
+				p.frame.printFrame(writer);
+				if (p.body != null) {
+					new Tree.Print(writer, p.body);
+					writer.println();
+				}
+				writer.println(")");
+			}
+		}
+		writer.flush();
+		 
 	}
 }

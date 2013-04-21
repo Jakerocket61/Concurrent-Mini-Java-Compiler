@@ -28,7 +28,6 @@ public class Program implements Visitable {
 		v.visit(this);
 	}
 
-	
 	public LinkedList<Exp> accept(Translate.Translate t){
 		return t.visit(this);
 	}
