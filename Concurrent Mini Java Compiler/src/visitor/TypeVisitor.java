@@ -59,6 +59,7 @@ public class TypeVisitor implements T_Visitor {
 	private Table<Types.Type> scopeTab = new Table<Types.Type>();
 
 	public TypeVisitor() {
+		scopeTab.put("String", new Types.STRING());
 	}
 
 	public void accept(Visitor v) {
@@ -511,6 +512,8 @@ public class TypeVisitor implements T_Visitor {
 			temp.methods = methodDecls;
 			temp.fields = varDecls;
 			scopeTab.put(classDecl.name, temp);
+
+			//classDecl.checktype = temp;
 		}
 
 		// //////////////////////////////////////////////////////////////////////
@@ -537,10 +540,14 @@ public class TypeVisitor implements T_Visitor {
 				Types.FUNCTION curr = (Types.FUNCTION) f.type;
 				curr.self = scopeTab.get(classDecl.name);
 				curr.result = classDecl.methods.get(i).returnVal.accept(this);
+				//System.err.println(curr.result.toString());
 				curr.formals = new Types.RECORD();
+				//System.err.println(curr.formals.toString());
 
 				for (Formal a : classDecl.methods.get(i).params)
 					curr.formals.put(a.type.accept(this), a.name);
+				
+				classDecl.methods.get(i).checktype = curr;
 			}
 
 			for (int i = 0; i < classDecl.fields.size(); i++) {
@@ -551,6 +558,8 @@ public class TypeVisitor implements T_Visitor {
 				varDecls.put(classDecl.fields.get(i).accept(this),
 						classDecl.fields.get(i).name);
 			}
+
+			//classDecl.checktype = temp;
 
 		}
 
@@ -582,6 +591,8 @@ public class TypeVisitor implements T_Visitor {
 			}
 
 			myClass.instance = temp;
+
+			classDecl.checktype = myClass;
 
 		}
 
