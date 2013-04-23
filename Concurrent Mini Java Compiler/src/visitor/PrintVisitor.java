@@ -153,6 +153,8 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		indent();
 		out.print(ast.method);
 		visit(ast.args);
+		indent();
+		out.print(ast.typeIndex);
 		indentCount--;
 		out.print(")");
 	}
@@ -164,9 +166,10 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		out.print(ast.name + " " + ast.parent);
 		visit(ast.fields);
 		visit(ast.methods);
-
+		//indentCount++;
+		
 		indent();
-
+		
 		out.print("CLASS(" + ast.name);
 		indentCount++;
 		indent();
@@ -221,7 +224,9 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		indentCount++;
 		ast.target.accept(this);
 		indent();
-		out.print(ast.field + ")");
+		out.print(ast.field);
+		indent();
+		out.print(ast.typeIndex + ")");
 		indentCount--;
 	}
 
@@ -322,12 +327,11 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 
 		ast.returnVal.accept(this);
 
-		indentCount++;
+		
 		//out.print("FUNCTION(" + ast.name);
 		//visit(ast.checktype);
 		ast.checktype.accept(this);
 		//indent();
-
 		indentCount--;
 		out.print(")");
 	}
@@ -500,7 +504,12 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 
 		out.print("OBJECT(" + ((Types.OBJECT)ast.self).myClass.name + ")");//ast.self.accept(this);
 		ast.formals.accept(this);// will go to record
-		ast.result.accept(this);// will handle return type
+		if(ast.result instanceof Types.OBJECT){
+			indent();
+			out.print("OBJECT(" + ((Types.OBJECT)ast.result).myClass.name + ")");
+		}
+		else
+			ast.result.accept(this);// will handle return type
 
 		indentCount--;
 		out.print(")");
@@ -570,6 +579,7 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 	public void visit(VarDecl ast) {
 		indent();
 		out.print("VarDecl(");
+		indentCount++;
 		ast.type.accept(this);
 		out.print(" " + ast.name);
 		if (null == ast.init) {
@@ -577,7 +587,7 @@ public class PrintVisitor implements Visitor, Types.Visitor {
 		} else {
 			ast.init.accept(this);
 		}
-		indentCount++;
+		
 		ast.checktype.accept(this);
 		indentCount--;
 		out.print(")");

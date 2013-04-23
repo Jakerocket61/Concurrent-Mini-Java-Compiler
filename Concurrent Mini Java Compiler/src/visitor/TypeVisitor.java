@@ -95,11 +95,14 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(ArrayExpr ast) {
+		
 		Types.Type target = ast.target.accept(this);
 		Types.Type index = ast.index.accept(this);
-
+		
 		if (index.coerceTo(new Types.INT())) {
-			return target;
+			//System.out.println(target.element);
+			ast.checktype = target;
+			return ((Types.ARRAY)target).element;
 		} else {
 			System.out.println("ERROR incompatible types: int required, but "
 					+ index.toString() + " found");
@@ -109,6 +112,7 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(ArrayType ast) {
+		//System.out.println(ast.base.accept(this));
 		return new Types.ARRAY(ast.base.accept(this));
 	}
 
@@ -156,6 +160,13 @@ public class TypeVisitor implements T_Visitor {
 			System.err.println("ERROR cannot resolve method " + methodName);
 			System.exit(0);
 		}
+		
+		Types.Type target = ast.target.accept(this);
+		
+		if(target instanceof Types.OBJECT){
+			//System.out.println(((Types.OBJECT) target).fields.get(methodName).index);
+			ast.typeIndex = ((Types.OBJECT) target).methods.get(methodName).index;
+		}
 
 		for (Types.FIELD f : ((Types.FUNCTION) current).formals) {
 			Types.Type t1 = f.type;
@@ -192,7 +203,6 @@ public class TypeVisitor implements T_Visitor {
 		// }
 
 		scopeTab.endScope();
-		System.out.println((Types.FUNCTION) current);
 		return ((Types.FUNCTION) current).result;
 	}
 
@@ -227,7 +237,7 @@ public class TypeVisitor implements T_Visitor {
 		Types.Type t2 = ast.e2.accept(this);
 
 		if ((t1.coerceTo(t2)) && (t2.coerceTo(t1)))
-			return t1;
+			return new Types.BOOLEAN();
 
 		System.err.println("ERROR operator == cannot be applied to "
 				+ t1.toString() + ", " + t2.toString());
@@ -245,14 +255,22 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(FieldExpr ast) {
-		Types.Type t = ast.target.accept(this);
-		if (t instanceof Types.OBJECT) {
-			for (Types.FIELD f : ((Types.OBJECT) t).fields) {
-				System.out.println("	" + ast.field);
+		Types.OBJECT t = (Types.OBJECT)ast.target.accept(this);
+		ast.checktype = t;
+		//if (t instanceof Types.OBJECT) {
+		Types.FIELD f = t.fields.get(ast.field);
+		if(f != null){
+			ast.typeIndex = f.index;
+			return f.type;
+			
+			
+			/*for (Types.FIELD f : ((Types.OBJECT) t).fields) {
+				//System.out.println("	" + ast.field);
 				if (f.name.equals(ast.field)) {
+					ast.typeIndex = f.index;
 					return f.type;
 				}
-			}
+			}*/
 		} else {
 			System.err.println("ERROR cannot resolve symbol " + ast.field);
 			System.exit(0);
@@ -262,8 +280,10 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(Formal ast) {
-		scopeTab.put(ast.name, ast.type.accept(this));
-		return ast.type.accept(this);
+		Types.Type t = ast.type.accept(this);
+		ast.checktype = t;
+		scopeTab.put(ast.name, t);
+		return t;
 	}
 
 	public Types.Type visit(GreaterExpr ast) {
@@ -271,7 +291,7 @@ public class TypeVisitor implements T_Visitor {
 		Types.Type t2 = ast.e2.accept(this);
 
 		if ((t1.coerceTo(t2)) && (t2.coerceTo(t1)))
-			return t1;
+			return new Types.BOOLEAN();
 
 		System.err.println("ERROR operator > cannot be applied to "
 				+ t1.toString() + ", " + t2.toString());
@@ -281,17 +301,17 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(IdentifierExpr ast) {
+		ast.checktype = scopeTab.get(ast.id);
 		return scopeTab.get(ast.id);
 	}
 
 	public Types.Type visit(IdentifierType ast) {
-
-		return scopeTab.get(ast.id);
+		ast.checktype = scopeTab.get(ast.id);
+		return ast.checktype;
 	}
 
 	public Types.Type visit(IfStmt ast) {
 		Types.Type type = ast.test.accept(this);
-
 		if (type.coerceTo(new Types.BOOLEAN()))
 			;
 		else {
@@ -310,6 +330,7 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(IntegerLiteral ast) {
+		ast.checktype = new Types.INT();
 		return new Types.INT();
 	}
 
@@ -329,7 +350,7 @@ public class TypeVisitor implements T_Visitor {
 		Types.Type t2 = ast.e2.accept(this);
 
 		if ((t1.coerceTo(t2)) && (t2.coerceTo(t1)))
-			return t1;
+			return new Types.BOOLEAN();
 
 		System.err.println("ERROR operator < cannot be applied to "
 				+ t1.toString() + ", " + t2.toString());
@@ -402,6 +423,7 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(NewArrayExpr ast) {
+		ast.checktype = new Types.ARRAY(ast.type.accept(this));
 		for (Expr e : ast.dimensions) {
 			Types.Type t = e.accept(this);
 			if (t.coerceTo(new Types.INT())) {
@@ -413,13 +435,15 @@ public class TypeVisitor implements T_Visitor {
 				System.exit(0);
 			}
 		}
-
-		return new Types.ARRAY(ast.type.accept(this));
+		//System.out.println(ast.type.accept(this));
+		ast.checktype = new Types.ARRAY(ast.type.accept(this));
+		return ast.checktype;
 
 	}
 
 	public Types.Type visit(NewObjectExpr ast) {
-		return ast.type.accept(this);
+		ast.checktype = ast.type.accept(this);
+		return ast.checktype;
 	}
 
 	public Types.Type visit(NotEqExpr ast) {
@@ -427,7 +451,7 @@ public class TypeVisitor implements T_Visitor {
 		Types.Type t2 = ast.e2.accept(this);
 
 		if ((t1.coerceTo(t2)) && (t2.coerceTo(t1)))
-			return t1;
+			return new Types.BOOLEAN();
 
 		System.err.println("ERROR operator != cannot be applied to "
 				+ t1.toString() + ", " + t2.toString());
@@ -495,7 +519,7 @@ public class TypeVisitor implements T_Visitor {
                 //Types.Type tmp = visit(varDecl.type);
                 //varDecl.checktype = visit(varDecl.type);
 				
-                varDecls.put(null, varDecl.name);
+                varDecls.put(varDecl.accept(this), varDecl.name);
                 /*varDecl.checktype = varDecl.type.accept(this);
                 System.err.println("type: "+varDecl.checktype);
                 varDecls.put(varDecl.type.accept(this), varDecl.name);*/
@@ -511,7 +535,7 @@ public class TypeVisitor implements T_Visitor {
 			temp.methods = methodDecls;
 			temp.fields = varDecls;
 			//scopeTab.put(classDecl.name, temp);
-			classesTemp.add(temp);
+			classesTemp.addLast(temp);
 			//classDecl.checktype = temp;
 		}
 
@@ -556,16 +580,15 @@ public class TypeVisitor implements T_Visitor {
 				classDecl.methods.get(i).checktype = curr;
 			}
 
-			for (int i = 0; i < classDecl.fields.size(); i++) {
-                		classDecl.fields.get(i) = classDecl.fields.get(i).accept(this);
+			/*for (int i = 0; i < classDecl.fields.size(); i++) {
+                	temp.fields.put(classDecl.fields.get(i).accept(this), classDecl.fields.get(i).name);
 
                 //System.err.println("cl: "+classDecl.fields.get(i).type);
 
-				varDecls.put(classDecl.fields.get(i).accept(this),
-						classDecl.fields.get(i).name);
-			}
+                	varDecls.put(classDecl.fields.get(i).accept(this), classDecl.fields.get(i).name);
+			}*/
 
-			classesTemp.add(temp);
+			classesTemp.addLast(temp);
 
 
 			//classDecl.checktype = temp;
@@ -578,6 +601,7 @@ public class TypeVisitor implements T_Visitor {
 
 		for (ClassDecl classDecl : ast.classes) {
 			Types.CLASS myClass = classesTemp.removeFirst(); //(Types.CLASS) scopeTab.get(classDecl.name);
+			//System.out.println(myClass.name);
 			Types.CLASS parent = myClass.parent;
 
 			while (parent != null) {
@@ -590,7 +614,6 @@ public class TypeVisitor implements T_Visitor {
 			}
 
 			Types.OBJECT temp = new Types.OBJECT(myClass);
-
 			for (Types.FIELD f : myClass.fields) {
 				temp.fields.put(f, f.name);
 			}
@@ -622,8 +645,12 @@ public class TypeVisitor implements T_Visitor {
 			scopeTab.beginScope();
 			scopeTab.put("this", classDecl.checktype.instance);
 
-			for (MethodDecl methodDecl : classDecl.methods)
-				methodDecl.checktype.result = methodDecl.returnVal.accept(this);
+			for (MethodDecl methodDecl : classDecl.methods){
+				if(methodDecl.name.equals("main"))
+					methodDecl.checktype.result = new Types.VOID();
+				else
+					methodDecl.checktype.result = methodDecl.returnVal.accept(this);
+			}
 
 			for (MethodDecl methodDecl : classDecl.methods)
 				methodDecl.accept(this);
@@ -642,7 +669,8 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(StringLiteral ast) {
-		return new Types.STRING();
+		ast.checktype = new Types.STRING();
+		return ast.checktype;
 	}
 
 	public Types.Type visit(SubExpr ast) {
@@ -660,7 +688,8 @@ public class TypeVisitor implements T_Visitor {
 	}
 
 	public Types.Type visit(ThisExpr ast) {
-		return scopeTab.get("this");
+		ast.checktype = scopeTab.get("this");
+		return ast.checktype;
 	}
 
 	public Types.Type visit(ThreadDecl ast) {
@@ -689,14 +718,12 @@ public class TypeVisitor implements T_Visitor {
 	public Types.Type visit(VarDecl ast) {
 		Types.Type t1 = ast.type.accept(this);
         //System.err.println(t1);
-        //Types.Type t1 = visit(ast.type);
 		Types.Type t2;
 		if (ast.init != null)
 			t2 = ast.init.accept(this);
 		else {
 			t2 = new Types.NIL();
 		}
-
         // Types.Type
         //      Direct Known Subclasses:
         //          ARRAY, BOOLEAN, CLASS, FIELD, FUNCTION, INT, NIL, OBJECT, RECORD, STRING, VOID
@@ -710,7 +737,7 @@ public class TypeVisitor implements T_Visitor {
         }
         else if (ast.type instanceof ArrayType)
         {
-            ast.checktype = new Types.ARRAY(((ArrayType)ast.type).checktype);
+            ast.checktype = ast.type.accept(this);
         }
         else if (ast.type instanceof IdentifierType)
         {
@@ -755,6 +782,7 @@ public class TypeVisitor implements T_Visitor {
 
 	public Types.Type visit(WhileStmt ast) {
 		Types.Type type = ast.test.accept(this);
+		ast.body.accept(this);
 
 		if (type.coerceTo(new Types.BOOLEAN()))
 			;
@@ -777,6 +805,8 @@ public class TypeVisitor implements T_Visitor {
 			System.err.println("ERROR mismatch in number of arguments");
 			System.exit(0);
 		}
+		
+		ast.checktype = type;
 
 		return type;
 	}

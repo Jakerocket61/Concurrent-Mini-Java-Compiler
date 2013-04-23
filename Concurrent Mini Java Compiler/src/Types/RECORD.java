@@ -35,6 +35,7 @@ public class RECORD extends Type implements Iterable<FIELD>// , Visitable
 		hash.put(name, type);
 		fields.add(type);
 		index = index + 1;
+		type.index = index - 1;
 		return type;
 	}
 

@@ -1,6 +1,5 @@
 PARSER   		= 	Parse
 CHECKER	 		= 	Semant
-TRANSLATOR 		= 	Translate
 
 JAVAC    		= 	javac
 JAVA     		= 	java
@@ -11,9 +10,6 @@ JAVACC_FLAGS_PARSE 	= 	-OUTPUT_DIRECTORY=Parse/
 
 JAVACC_FLAGS_SEMANT 	= 	-NOSTATIC -OUTPUT_DIRECTORY=Semant/
 
-JAVACC_FLAGS_TRANSLATE 	= 	-OUTPUT_DIRECTORY=Parse/
-
-JAVACC_FLAGS_ASSEM 	= 	-OUTPUT_DIRECTORY=Parse/
 
 JAVACC_GEN_PARSE 	= 	Parse/SimpleCharStream.java 	Parse/ParseException.java 		Parse/Parse.java \
         				Parse/ParseConstants.java 		Parse/ParseTokenManager.java 	Parse/Token.java \
@@ -23,13 +19,6 @@ JAVACC_GEN_SEMANT 	= 	Semant/SimpleCharStream.java 		Semant/ParseException.java 
         				Semant/ReadAbsynConstants.java 		Semant/ReadAbsynTokenManager.java 	Semant/Token.java \
         				Semant/TokenMgrError.java 
 
-JAVACC_GEN_TRANSLATE 	= 	Parse/SimpleCharStream.java 	Parse/ParseException.java 			Parse/ReadTypes.java \
-        					Parse/ReadTypesConstants.java 	Parse/ReadTypesTokenManager.java 	Parse/Token.java \
-        					Parse/TokenMgrError.java 
-        					
-JAVACC_GEN_ASSEM 	= 		Parse/SimpleCharStream.java 	Parse/ParseException.java 			Parse/ReadFrags.java \
-							Parse/ReadFragsConstants.java 	Parse/ReadFragsTokenManager.java 	Parse/Token.java \
-							Parse/TokenMgrError.java 
 
 ABSYN    		= 	Absyn/Absyn.java 			Absyn/AddExpr.java 			Absyn/AndExpr.java \
 					Absyn/ArrayExpr.java 		Absyn/ArrayType.java 		Absyn/AssignableExpr.java \
@@ -57,47 +46,18 @@ TYPES			= 	Types/ARRAY.java 		Types/BOOLEAN.java 		Types/CLASS.java \
 VISIT    		= 	visitor/Visitable.java 		visitor/Visitor.java 		visitor/PrintVisitor.java \
 					visitor/TypeVisitor.java 	visitor/T_Visitor.java 
 
-TRANSLATE  		= 	Translate/Cx.java 		Translate/DataFrag.java 	Translate/Ex.java \
-					Translate/Exp.java 		Translate/Frag.java 		Translate/IfThenElseExp.java \
-					Translate/Nx.java 		Translate/ProcFrag.java 
-					
-ASSEM			= 	Assem/Instr.java			Assem/LABEL.java		Assem/MOVE.java	\
-					Assem/OPER.java				Canon/Canon.java 			Canon/Canon.java \
-					Canon/TraceSchedule.java 		Mips/InFrame.java 		Mips/InReg.java \
-					Mips/MipsFrame.java			Mips/Codegen.java
 
-TREE			=	Tree/BINOP.java				Tree/CALL.java			Tree/CJUMP.java \
-					Tree/CONST.java			Tree/ESEQ.java			Tree/Exp.java \
-					Tree/EXP.java			Tree/Hospitable.java			Tree/IntVisitor.java	\
-					Tree/JUMP.java			Tree/LABEL.java			Tree/MEM.java	\
-					Tree/MOVE.java			Tree/NAME.java			Tree/Print.java	\
-					Tree/SEQ.java			Tree/Stm.java			Tree/TEMP.java	
-
-
-TEMP			=	Temp/CombineMap.java			Temp/DefaultMap.java		Temp/Label.java \
-				Temp/LabelList.java			Temp/Temp.java			Temp/TempList.java \
-				Temp/TempMap.java		
-SYMBOL			=	Symbol/Table.java		Symbol/Symbol.java
-
-SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) $(TREE) $(TEMP) $(TRANSLATE)  $(SYMBOL) $(ASSEM) \
+SRCS     		= 	$(VISIT) $(ABSYN) $(TYPES) \
 					Semant/ReadAbsyn.java		Semant/Main.java \
-					Parse/ReadTypes.java		Translate/Main.java \
 					Parse/Parse.java 			Parse/Main.java   \
-					Parse/ReadFrags.java		Assem/Main.java		
 
 all:  				$(SRCS:.java=.class)
 
 Parse/Parse.java: 		Parse/Parse.jj 
 				$(JAVACC) $(JAVACC_FLAGS_PARSE) $<
 
-Parse/ReadTypes.java: 		Parse/ReadTypes.jj 
-				$(JAVACC) $(JAVACC_FLAGS_TRANSLATE) $<
-
 Semant/ReadAbsyn.java: 		Semant/ReadAbsyn.jj
 				$(JAVACC) $(JAVACC_FLAGS_SEMANT) $<
-
-Parse/ReadFrags.java: 		Parse/ReadFrags.jj
-				$(JAVACC) $(JAVACC_FLAGS_ASSEM) $<
 
 %.class : 			%.java
 				$(JAVAC) $<
@@ -108,22 +68,13 @@ parser: 		Parse/Parse.class 			Parse/ParseConstants.class 		Parse/ParseTokenMana
 checker: 		Semant/ReadAbsyn.class 			Semant/ReadAbsynConstants.class 	Semant/ReadAbsynTokenManager.class \
 				Semant/ReadAbsynException.class
 
-translator:		Parse/ReadTypes.class 		Parse/ReadTypesConstants.class 	Parse/ReadTypesTokenManager.class \
-				Parse/ReadTypesException.class 
-
-assem:			Assem/ReadFrags.class 		Assem/ReadFragsConstants.class 	Assem/ReadFragsTokenManager.class \
-				Assem/ReadFragsException.class 
 
 main: 			Semant/Main.class 		Semant/ReadAbsyn.class \
-				Translate/Main.class	Parse/ReadTypes.class \	
 			 	Parse/Parse.class 		Parse/Main.class \
-			 	Assem/Main.class		Assem/ReadAssem.java
 
 clean: 		
 		rm -f 		$(SRCS:.java=.class) \
 				${JAVACC_GEN_SEMANT} $(JAVACC_GEN_SEMANT:.java=.class) \
-				${JAVACC_GEN_TRANSLATE} $(JAVACC_GEN_TRANSLATE:.java=.class) \
-				${JAVACC_GEN_ASSEM} $(JAVACC_GEN_ASSEM:.java=.class) \
 				${JAVACC_GEN_PARSE} $(JAVACC_GEN_PARSE:.java=.class) \
 				Parse/Parse*.class \
 				Semant/ReadAbsyn*.class \
