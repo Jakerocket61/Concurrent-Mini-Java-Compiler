@@ -25,4 +25,14 @@ public class JUMP extends Stm implements Hospitable {
 	public void accept(CodeVisitor v){
 		v.visit(this);
 	}
+	
+	public LinkedList<Stm> kids() {
+		LinkedList<Stm> kids = new LinkedList<Stm>();
+		kids.add(new EXP(exp));
+		return kids;
+	}
+
+	public Stm build(LinkedList<Stm> exps) {
+		return new EXP(((Tree.EXP)exps.removeFirst()).exp);
+	}
 }
