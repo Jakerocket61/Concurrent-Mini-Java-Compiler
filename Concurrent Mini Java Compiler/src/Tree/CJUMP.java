@@ -1,5 +1,7 @@
 package Tree;
 
+import java.util.LinkedList;
+
 import Temp.Label;
 
 public class CJUMP extends Stm implements Hospitable {
@@ -51,5 +53,18 @@ public class CJUMP extends Stm implements Hospitable {
 	
 	public void accept(CodeVisitor v){
 		v.visit(this);
+	}
+	
+	public LinkedList<Stm> kids() {	
+		LinkedList<Stm> kids = new LinkedList<Stm>();
+		kids.add(new EXP(left));
+		kids.add(new EXP(right));
+		kids.add(new LABEL(iftrue));
+		kids.add(new LABEL(iffalse));
+		return kids;
+	}
+
+	public Stm build(LinkedList<Stm> kids) {
+		return new CJUMP(relop, ((Tree.EXP)kids.removeFirst()).exp, ((Tree.EXP)kids.removeFirst()).exp, ((Tree.LABEL)kids.removeFirst()).label, ((Tree.LABEL)kids.removeFirst()).label);
 	}
 }
